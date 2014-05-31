@@ -87,7 +87,7 @@ Zdrojové kódy jsou určeny ke studijn­ím účelům, ne ke kopírování. Pla
 3BIT
   Zimní semestr
     IIS
-      Informační systém pekárny (24/30), online verze
+      Informační systém pekárny (24/30)
 
     IMP
       Cvičení (15/16) pozn. zdrojáky jsou správně, bod jsem ztratila na doplňující otázce :-)
