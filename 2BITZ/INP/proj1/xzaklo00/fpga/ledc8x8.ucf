@@ -1,0 +1,18 @@
+NET "SMCLK"      LOC = "P80"  | PERIOD=8 MHz HIGH 50%;
+NET "RESET"      LOC = "P155";
+NET "ROW<0>"     LOC = "P204";
+NET "ROW<1>"     LOC = "P2";
+NET "ROW<2>"		 LOC = "P7";
+NET "ROW<3>"		 LOC = "P10";
+NET "ROW<4>"		 LOC = "P12";
+NET "ROW<5>"		 LOC = "P15";
+NET "ROW<6>"		 LOC = "P18";
+NET "ROW<7>"		 LOC = "P20";
+NET "LED<0>"		 LOC = "P26";
+NET "LED<1>"		 LOC = "P28";
+NET "LED<2>"		 LOC = "P34";
+NET "LED<3>"		 LOC = "P36";
+NET "LED<4>"		 LOC = "P39";
+NET "LED<5>"		 LOC = "P42";
+NET "LED<6>"		 LOC = "P44";
+NET "LED<7>"		 LOC = "P46";

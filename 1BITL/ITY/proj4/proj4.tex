@@ -1,0 +1,42 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=2cm,text={17cm, 24cm},top=3cm]{geometry}
+\usepackage[latin2]{inputenc}
+\usepackage[IL2]{fontenc}
+\usepackage[czech]{babel}
+\usepackage{natbib}
+\usepackage{url}
+\newcommand\myuv[1]{\quotedblbase #1\textquotedblleft}
+\DeclareUrlCommand\url{\def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}}
+
+\begin{document}
+\begin{titlepage}
+\begin{center}
+\Huge
+\textsc{Vysoké uèení technické v~Brnì}\\
+\huge
+\textsc{Fakulta informaèních technologií}\\
+\vspace {\stretch{0.382}}
+\LARGE{Typografie a publikování - 4. projekt}\\
+\Huge{Bibliografické citace}\\
+\vspace{\stretch{0.618}}
+\end{center}
+\Large{19.dubna 2011 \hfill Kateøina Zaklová}
+\end{titlepage}
+
+\newpage
+
+\section*{Operaèní systém Linux}
+V~dne¹ní dobì snad ka¾dý èlovìk pou¾ívá poèítaè. S~tímto úzce souvisí téma operaèních systémù. Ka¾dému vyhovuje nìco jiného, asi nejroz¹íøenìj¹ím OS je Windows, nicménì pomìrnì velkou u¾ivatelskou základnu má i Linux. Témìø ka¾dý z~nás zaèínal na Windows a pøípadnì pøe¹el na jiný OS. Bylo vydáno nemalé mno¾ství publikací o~Linuxu, ale pro úplného zaèáteèníka bude nejvhodnìj¹í zaèít od základù \cite{Veselsky_Roubicek_Kocan:Linux_Dokumentacni_projekt}. Dále je mo¾né vyzkou¹et nìkterou z~internetových stránek jako napøíklad \emph{root.cz} \cite{Vojtaj:Jak_spravne_prejit_na_Linux} nebo \emph{abclinuxu.cz} \cite{Watzke:Unixove_nastroje}, èlovìk zde najde odpovìï na vìt¹inu svých dotazù a problémù.
+
+Jako vhodný zpùsob se nìco pøiuèit se nabízí i velká ¹kála èlánkù a èasopisù, mezi nejznámìj¹í patøí \emph{Computer} \cite{computer:casopis}. V~tomto èasopise stojí za zmínìní napøíklad èlánek o~distribuci OpenSUSE \cite{computer:clanek1} nebo èlánek, který se zabývá softwarem dostupným pro distribuce Linuxu \cite{computer:clanek2}.
+
+Existuje v¹ak i spousta u¾iteèných materiálù pro pokroèilej¹í u¾ivatele. Jedním z~nich je kniha \emph{Linux: Zaèínáme programovat} \cite{Matthew_Stones:Linux_Zaciname_programovat}, pro zájemce dostupná také v~anglickém jazyce \cite{Matthew_Stones:Beginning_Linux_Programming}. Kniha se zabývá pokroèilej¹ími funkcemi operaèního systému, programováním v~shellu, procesy a jejich synchronizací aj. Dal¹ím zdrojem informací pro pokroèilé je napøíklad stránka \emph{linuxsoft.cz} \cite{Hatina:Linux_v_prikazech}.
+
+Linux jako takový zahrnuje pomìrnì velké mno¾ství témat z~nejrùznìj¹ích oblastí informatiky, proto si ho øada studentù vybírá jako námìt pro svoji diplomovou èi disertaèní práci. Mo¾ností je mnoho, od programování rùzných aplikací a softwaru pøes návody k~vylep¹ení samotného u¾ivatelského prostøedí po srovnání s~jinými operaèními systémy aj. Tato práce se zabývá virtualizací operaèního systému Linux\_VServer \cite{Tomecek:Virtualni_stroje_pro_Linux}, tato vytváøí multimediální centrum zalo¾ené na operaèním systému Linux \cite{Sekanina:Multimedialni_centrum}.
+
+\newpage
+\bibliographystyle{czechiso}
+\def\refname{Pou¾itá literatura}
+\bibliography{proj4}
+
+\end{document}

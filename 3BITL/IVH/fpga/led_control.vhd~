@@ -1,0 +1,83 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity led_control is
+   port (
+     CLK : in std_logic;
+     RESET : in std_logic;
+     HALF : out std_logic_vector(1 downto 0);
+     LAYER : out std_logic_vector(3 downto 0);
+     LEDS : in std_logic_vector(63 downto 0);
+     LEDS_ACT : out std_logic_vector(7 downto 0)
+    );
+end entity;
+
+architecture beh of led_control is
+	signal leds_out : std_logic_vector(7 downto 0) := (others => '0');
+	signal cnt : integer range 0 to 10000000000 := 0;
+	signal swap_half : std_logic := '0';
+	signal swap_layer : std_logic := '0';
+	signal half : std_logic_vector(1 downto 0) := "01";
+	signal layer : std_logic_vector(3 downto 0) := "0001";
+begin
+	process (CLK, RESET, swap_half)
+	begin
+		if (swap_half = '1')
+			half <= half(0) & half(1);
+			swap_half <= '0';
+		end if;
+	end process;
+	
+	HALF <= half;
+	
+	process (CLK, RESET, swap_layer)
+	begin
+		if (swap_layer = '1')
+			layer <= layer(2 downto 0) & layer(3);
+			swap_layer <= '0';
+		end if;
+	end process;
+   
+   LAYER <= layer;
+   
+   process (CLK, RESET)
+   begin
+		if (half = "01") then		-- "prava" polovina
+			with layer  select
+				LEDS_ACT <= LEDS(15 downto 8) WHEN "0001",	-- vrstva 0
+				LEDS(31 downto 24) when "0010",-- vrstva 1
+				LEDS(47 downto 40) when "0100",-- vrstva 2
+				LEDS(63 downto 56) when "1000";-- vrstva 3
+		elsif (half = "10") then		-- "leva" polovina
+			with layer  select
+				LEDS_ACT <= LEDS(7 downto 0) WHEN "0001",	-- vrstva 0
+				LEDS(23 downto 16) when "0010",-- vrstva 1
+				LEDS(39 downto 32) when "0100",-- vrstva 2
+				LEDS(55 downto 48) when "1000";-- vrstva 3
+		else
+			half <= "01";
+		end if;
+   end process;
+   
+   
+   
+	process (CLK, RESET)
+	begin
+		if(RESET = '1') then
+			cnt <= 0;
+		elsif (CLK'event) and (CLK = '1') then
+			if (cnt = 1000000) then
+				swap_half <= '1';
+			elsif (cnt = 2000000)
+				swap_layer <= '1';
+				cnt <= 0;
+			else
+				cnt <= cnt + 1;
+			end if;
+		end if;
+	end process;
+   
+   
+   LEDS_ACT <= leds_out;
+end architecture;

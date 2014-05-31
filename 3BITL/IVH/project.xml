@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project outputprefix="lcd">
+
+	<!--  Project description -->
+<name>Cube from Hell</name>
+    <author>Kateřina Zaklová</author>
+    <authoremail>xzaklo00@stud.fit.vutbr.cz</authoremail>
+    <author>Mario Wanka</author>
+    <authoremail>xwanka00@stud.fit.vutbr.cz</authoremail>
+    <description>Led cube pro FITKIT 2.0</description>
+	<!--  MCU part -->
+	<mcu>
+		<file>main.c</file>
+	</mcu>
+
+	<!-- FPGA part -->
+	<fpga architecture="gp" dcmfrequency="40MHz">
+		<file>top.vhd</file>
+		<file>led_control.vhd</file>
+	</fpga>
+
+</project>

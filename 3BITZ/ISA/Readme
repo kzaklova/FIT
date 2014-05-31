@@ -1,0 +1,39 @@
+Traceroute
+
+Autor: Katerina Zaklova, xzaklo00@stud.fit.vutbr.cz
+Datum: 17.11.2012
+
+Popis: Program mapuje cestu pruchodu packetu siti. Vypisuje jednotlive
+smerovace mezi zdrojem a cilem, ktery je urcen vstupnim argumentem.
+Zaroven vypisuje doby odezvy jednotlivych smerovacu.
+
+Program je spustitelny na operacnich systemech Linux, byl vyvijen a
+testovan na operacnim systemu Ubuntu 10.04, Ubuntu 12.04 a Xubuntu 11.10.
+
+Program NELZE spustit jinak, nez s pravy roota. Pokud tato prava nebude
+mit, nedojde k vytvoreni RAW socketu a program bude nefunkcni.
+
+
+Seznam souboru:
+  Makefile         - prekladovy soubor
+  manual.pdf       - dokumentace
+  Readme           - tento soubor
+  trace.cpp        - zdrojovy kod projektu
+
+Makefile:
+  $ make           - prelozi program
+  $ make clean     - odstrani prelozeny program
+  $ make tar       - vytvori archiv xzaklo00.tar
+  $ make rmtar     - odstrani archiv xzaklo00.tar
+
+Preklad:
+  g++ -Wall -pedantic -Wextra trace.cpp -o trace
+
+Spusteni:
+  $ ./trace -h|-help|--help
+  - vypise napovedu
+
+  $ ./trace [-f first_ttl][-m max_ttl] host
+  - spusti traceroute na danou cilovou adresu (host)
+  - argumenty -f a -m jsou volitelne, urcuji minimalni a maximalni
+  hodnotu TTL

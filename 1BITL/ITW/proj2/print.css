@@ -1,0 +1,10 @@
+body {
+  color: black; 
+  font-size: 10pt;
+  text-align: justify;
+  background-color: #ffffff;
+}
+
+#head, #menu, #submenu, #foot, #novinky {
+  display: none;
+}

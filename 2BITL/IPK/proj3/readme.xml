@@ -1,0 +1,29 @@
+<ipk-projekt-3>
+<autor>Katerina Zaklova</autor>
+<login>xzaklo00@stud.fit.vutbr.cz</login>
+<datum>28.4.2013</datum>
+<soubory>
+<soubor jmeno="udt.h" autor="Ondrej Rysavy"/>
+<soubor jmeno="rdtclient.cpp" autor="Katerina Zaklova"/>
+<soubor jmeno="rdtserver.cpp" autor="Katerina Zaklova"/>
+</soubory>
+<implementace>
+Projekt slouzi k zabezpeceni spolehlive komunikace s pouzitim protokolu UDP.
+Protokol je nespolehlivy, proto bylo treba provest nekolik uprav. Ke kazdemu
+odesilanemu packetu byla dodana hlavicka, do ktere se uklada poradove cislo
+packetu, velikost okna, hodnota casovace Tack, login odesilatele a hodnota
+urcujici, zda k danemu packetu dosel ACK. K odesilani dochazi pomoci "sliding
+window", pro implementaci bylo nutne zvolit metodu s kumulativnim potvrzovanim,
+proto byl vybran algoritmus "go-back-n". Na strane klienta se vyhleda packet
+s nejnizsim sekvencnim cislem, ktery jeste nebyl potvrzen, a pocinaje timto
+packetem se naplni a odesle okno. Okno ma promenlivou velikost, po prijeti ACK
+se zvetsuje, po vyprseni casovace se zmensuje podle vztahu uvedenho v zadani
+ulohy. Na strane serveru funguje citac, ktery urcuje cislo ocekavaneho packetu.
+Pokud prijde packet s timto cislem, vypise jeho datovou cast na vystup, posle
+ACK s jeho cislem a zvysi hodnotu citace, v opacnem pripade posle pouze ACK
+posledniho vypsaneho packetu. Klient pak vyckava na prichozi ACK, a v pripade,
+ze obdrzi ACK s vyssim cislem, nez ocekava, doplni ACK i pro vsechny packety
+s cislem nizsim. Po potvrzeni posledniho packetu dojde k ukonceni klienta.
+Server lze ukoncit pouze zaslanim signalu SIGTERM.
+</implementace>
+</ipk-projekt-3>

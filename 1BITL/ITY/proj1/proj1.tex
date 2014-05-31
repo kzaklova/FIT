@@ -1,0 +1,57 @@
+\documentclass[czech,a4paper,10pt,twocolumn]{article}
+\usepackage{babel}
+\usepackage[left=1.5cm,text={18cm, 25cm},top=2.5cm]{geometry}
+\usepackage[IL2]{fontenc}
+\newcommand{\myuv}[1]{\quotedblbase #1\textquotedblleft}
+
+\begin{document}
+\title{Typografie a publikování\\1. projekt}
+\author{Kateøina Zaklová\\xzaklo00@stud.fit.vutbr.cz}
+\date{}
+\maketitle
+
+\section{Hladká sazba}
+
+Hladká sazba je sazba z~jednoho stupnì, druhu a øezu písma sázená na stanovenou ¹íøku odstavce. Je slo¾ena z~odstavcù, které obvykle zaèínají zará¾kou, ale mohou být sázeny i bez zará¾ky\,--\,rozhodující je celková grafická úprava. Vìty nesmí zaèínat èíslicí.
+
+Barevné zvýraznìní, èi podtrhávání slov se zde také nepou¾ívá. Hladká sazba je urèena pøedev¹ím pro del¹í texty, jako je napøíklad beletrie. Poru¹ení konzistence sazby pùsobí v~textu ru¹ivì a unavuje ètenáøùv zrak.
+
+\section{Smí¹ená sazba}
+
+Smí¹ená sazba má o~nìco volnìj¹í pravidla. Klasická hlad\-ká sazba se nìkdy doplòuje o~dal¹í øezy písma pro zvýraznìní dùle¾itých pojmù. Existuje \myuv
+{pravidlo}:
+
+\begin{quote}
+Èím více druhù, øezù, velikostí, barev písma a ji\-ných efektù pou¾ijeme, tím profesionálnìji bude dokument vypadat. Ètenáø tím bude nad¹en!
+\end{quote}
+
+\textsc{Tímto pravidlem se nikdy nesmíte øídit.} \textsf{Pøíli¹ èasté} zvýrazòování \texttt{textových elementù} a zmìny {\small velikosti} {\large písma} {\Large jsou} {\LARGE známkou} \textbf {\huge amatérismu} autora a pùsobí \emph{\textbf{velmi} ru¹ivì}. Dobøe navr¾ený dokument nemá obsahovat více ne¾ 4 øezy èi druhy písma. Dobøe navr¾ený dokument je decentní, ne chaotický.
+
+Dùle¾itým znakem správnì vysázeného dokumentu je konzistentní pou¾ívání rùzných druhù zvýraznìní. To napøíklad mù¾e znamenat, ¾e \textbf{tuèný øez} písma bude vyhrazen pouze pro klíèová slova, \emph{sklonìný øez} pouze pro doposud neznámé pojmy a nebude se to míchat. Sklonìný øez nepùsobí tak ru¹ivì a pou¾ívá se èastìji. V~\LaTeX u jej sázíme radìji pøíkazem \verb|\emph{text}| ne¾ \verb|\textit{text}|.
+
+Smí¹ená sazba se nejèastìji pou¾ívá pro sazbu vìdeckých èlánkù a technických zpráv. U~del¹ích dokumentù vìdeckého èi technického charakteru je zvykem upozornit ètenáøe na význam rùzných typù zvýraznìní v~úvodní kapitole.
+
+\section{Dal¹í rady:}
+
+\begin{itemize}
+\item Nadpis nesmí konèit dvojteèkou a nesmí obsahovat odkazy (na obrázky, citace,\,\dots).
+\item Nadpisy, èíslování a odkazy na èíslované elementy nesmí být psány ad-hoc ruènì.
+\item Výèet ani obrázek nesmí zaèínat hned pod nadpisem a nesmí tvoøit celou kapitolu.
+\item Poznámky pod èarou\footnote{Pøíli¹ mnoho poznámek pod èarou ètenáøe zbyteènì rozptyluje.} pou¾ívejte opravdu støídmì. (©etøete i s~textem v~závorkách.)
+\item Nepou¾ívejte velké mno¾ství malých obrázkù. Zva¾te, zda je nelze seskupit do jednoho, èi více vìt¹ích obrázkù.
+\end{itemize}
+
+\section{Èeské odli¹nosti}
+
+Èeská sazba se oproti okolnímu svìtu v~nìkterých aspektech mírnì li¹í. Jednou z~odli¹ností je sazba uvozovek. Uvozovky se v~èe¹tinì pou¾ívají pøevá¾nì pro zobrazení pøímé øeèi. V~men¹í míøe se pou¾ívají také pro zvýraznìní pøezdívek a ironie. V~èe¹tinì se pou¾ívá tento \myuv{typ uvozovek} namísto anglických ``uvozovek''.
+
+Ve smí¹ené sazbì se øez uvozovek øídí øezem prvního uvozovaného slova. Pokud je uvozována celá vìta, sází se koncová teèka pøed uvozovku, pokud se uvozuje slovo nebo èást vìty, sází se teèka za uvozovku.
+
+\medskip
+Druhou odli¹ností je pravidlo pro sázení koncù øádkù. V~èeské sazbì by øádek nemìl konèit osamocenou jednopísmennou pøedlo¾kou nebo spojkou (spojkou \myuv{a} konèit mù¾e pøi sazbì do 25 liter). Abychom \LaTeX u zabránili v~sázení osamocených pøedlo¾ek, vkládáme mezi pøedlo¾ku a slovo nezlomitelnou mezeru znakem \verb|~| (vlnka, tilda). Pro automatické doplnìní vlnek slou¾í volnì ¹iøitelný program \emph{vlna} od pana Ol¹áka\footnote{Viz \texttt{ftp://math.feld.cvut.cz/pub/olsak/vlna/}.}.
+
+Principiálnì lep¹í øe¹ení nabízí balík \emph{encxvlna}, od pánù Ol¹áka a Wagnera\footnote{Viz \texttt{http://tug.ctan.org/pkg/encxvlna}.}. Zatím ov¹em není ve standardních distribucích \LaTeX u dostupný.
+\section{Závìr}
+Jistì jste postøehli, ¾e tento dokument obsahuje schválnì nìkolik typografických prohøe¹kù. Jeden odstavec v~sekci 2 a celá sekce 3 obsahují typografické chyby. V~kontextu celého textu je jistì snadno najdete. Je dobré znát mo¾nosti \LaTeX u, ale je také nutné vìdìt, kdy je nepou¾ít.
+
+\end{document}

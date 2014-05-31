@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-2"/>
+    <title>Projekt IIS</title>
+    <style type="text/css">
+    	table { border-collapse: collapse; }
+    	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+    	dt { font-weight: bold; margin-top: 0.5em; }
+    </style>
+</head>
+<body>
+
+<h1>Pekárna</h1>
+
+<dl>
+	<dt>Autoři</dt>
+	<dd>Kateřina Zaklová
+	    <a href="mailto:xzaklo00@stud.fit.vutbr.cz">xzaklo00@stud.fit.vutbr.cz</a> -
+		vzhled (html/css), databáze
+	</dd>
+	<dd>Radka Škvařilová
+	    <a href="mailto:xskvar06@stud.fit.vutbr.cz">xskvar06@stud.fit.vutbr.cz</a> - 
+		php skripty
+	</dd>
+	<dt>URL aplikace</dt>
+	<dd><a href="http://www.stud.fit.vutbr.cz/~xzaklo00/IIS/">http://www.stud.fit.vutbr.cz/~xzaklo00/IIS/</a></dd>
+	<dd><a href="http://www.stud.fit.vutbr.cz/~xskvar06/xxx/">http://www.stud.fit.vutbr.cz/~xskvar06/xxx/</a></dd>
+</dl>
+
+<h2>Uživatelé systému pro testování</h2>
+<table>
+<tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+<tr><td>admin</td><td>heslo</td><td>Administrátor</td></tr>
+<tr><td>zamestnanec</td><td>heslo</td><td>Zaměstnanec</td></tr>
+<tr><td>zakaznik</td><td>heslo</td><td>Zákazník</td></tr>
+</table>
+
+<h2>Implementace</h2>
+<p>Aplikace se spouští skriptem index.php, který spouští další skripty:
+<ul>
+<li>db_init.php -  připojí se k databázi</li>
+<li>edit.php - upravuje obsah databáze</li>
+<li>www.php - uživatelské rozhraní pro zákazníky</li>
+<li>zam.php - uživatelské rozhraní pro zaměstnance a administrátora, odhlašuje se po timeoutu 1 hodiny</li>
+</ul>
+Další obsažené soubory: 
+<ul>
+<li>style.css - kaskádový styl pro vzhled stránek, převzato z <a href="http://www.csstemplatesmarket.com">http://www.csstemplatesmarket.com</a></li>
+<li>menu1.html - záhlaví stránky</li>
+<li>menu2.html - zápatí stránky</li>
+<li>db.sql - databáze + data</li>
+</ul>
+</p>
+
+<h2>Instalace</h2>
+<ul>
+<li>Zkopírujte všechny soubory na server</li>
+<li>Importujte databázi ze souboru db.sql</li>
+<li>Aplikace vyžaduje PHP5 a MySQL5</li>
+</ul>
+
+<h2>Známé problémy</h2>
+<p>Pro naši implementaci byla zanedbána možnost péct si vlastní pečivo a skladovat suroviny. Pekárna funguje pouze jako obchod s pečivem, který dodává zákazníkům produkty.</p>
+<p>Kvůli problému s databází se nám bohužel nepodařila implementovat funkce vložit produkt do košíku.</p>
+</body>
+</html>
+

@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html><head>
+
+  <title> ITU ajax </title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">
+
+  <style type="text/css">
+
+  div, input { margin: 10px; }
+
+  </style>
+
+</head>
+
+<body style="background:#9933FF">
+
+
+
+<div id="chatArea" style="height: 300px; background:#FF0077; border: solid #aaa 1px; overflow:auto;"></div> 
+
+
+
+<form onsubmit="return uploadData()">
+
+  <input id="newMessageString" type="text" style="background:#FFC0CB;">
+
+  <input value="magic button" type="submit">
+
+</form>
+
+
+
+<div id="status" style="border: solid #aaa 1px; background:#FF0077; ">&nbsp;</div> 
+
+
+
+<script type="text/javascript">
+
+
+var lastId = 0;
+
+setInterval("downloadData()", 3000);
+
+downloadData();
+
+
+
+function createXmlHttpRequestObject() {
+
+  var xmlhttp;
+
+  try {
+
+    xmlHttp = new XMLHttpRequest(); //should work on all browsers except IE6 or older
+
+  } catch (e) { 
+
+    try {
+
+      xmlHttp = new ActiveXObject("Microsoft.XMLHttp"); //browser is IE6 or older
+
+    } catch (e) {
+
+      // ignore error
+
+    }
+
+  }
+
+  if (!xmlHttp) {
+
+    alert ("Error creating the XMLHttpRequest object.");
+
+  } else {
+
+    return xmlHttp;
+
+  }
+
+}
+
+
+
+function uploadData() {
+
+  try {
+
+    var xmlHttp = createXmlHttpRequestObject();//stores XMLHttpRequestObject
+    var message = document.getElementById("newMessageString").value;
+
+    if (message == "") {
+        alert("Can't send empty message!");
+        return false;
+    }
+
+    xmlHttp.open("GET", "http://www.stud.fit.vutbr.cz/~xmlich02/itu-ajax/api.php?data="+message);
+   	xmlHttp.onreadystatechange = function() {
+	  if ((xmlHttp.readyState==4) && (xmlHttp.status==200)) { //process is completed and http status is OK
+		downloadData();
+	  }
+	}
+    xmlHttp.send(null);
+    document.getElementById("newMessageString").value = "";
+
+  } catch (e) {
+    alert(e.toString());
+  }
+
+  return false; // to avoid default form submit behavior 
+}
+
+
+
+function downloadData() {
+
+  var xmlHttp = createXmlHttpRequestObject();
+  xmlHttp.open("GET", "http://www.stud.fit.vutbr.cz/~xmlich02/itu-ajax/api.php", true);
+  xmlHttp.onreadystatechange = refreshData;
+  xmlHttp.send(null);
+
+}
+
+
+
+function refreshData() {
+
+  if ((xmlHttp.readyState==4) && (xmlHttp.status==200)) { //process is completed and http status is OK
+
+    var chat_div = document.getElementById('chatArea');
+    var pole =  eval("(" + xmlHttp.responseText + ")");
+
+    for ( var i in pole ) {
+		if(lastId < pole[i].id && (pole[i].cnt != "")) {
+       		chat_div.innerHTML += "<font size=1 color=#2f4f4f>"+ pole[i].dts + "</font><br /><b><font size=4 color=#330033>" + pole[i].login + ":</font></b> " + pole[i].cnt + "<br\>";
+
+       		lastId = pole[i].id + " [" + pole[i].login + "]" + "<br />";
+			}
+		}
+
+	document.getElementById('status').innerHTML = lastId;
+	chat_div.scrollTop = chat_div.scrollHeight;
+   } 
+}
+
+</script>
+</body></html>

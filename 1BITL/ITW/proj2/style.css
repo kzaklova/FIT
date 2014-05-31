@@ -1,0 +1,158 @@
+body {
+  font-family: Verdana, sans-serif;
+  color: white; 
+  font-size: 10pt;
+  text-align: justify;
+  background-color: #080808;
+}
+
+#main{
+    max-width: 900px;
+    min-width: 640px;
+    margin: auto;
+    background-color: #000000;
+}
+
+#main a{
+ color: #b87138;
+}
+
+#main a:visited{
+ color: #331612;
+}
+
+#head{
+    height: 200px;
+    width: 100%;
+    background: transparent url('pozadi.png') no-repeat top right;
+}
+  
+#head h1 a{
+  height: 200px;
+  width: 100%;
+  display: block;
+  background: transparent url('logo.png') no-repeat left;
+  text-decoration: none;
+}
+
+#head h1 a span{
+ visibility: hidden;
+}
+
+#menu{
+  background: #331612 url('menu.jpg') no-repeat left;
+  margin-top: 0px;
+  height: 30px;
+}
+
+#menu ul{
+  margin: 0px;
+  text-align: center;
+  list-style: none;
+}
+
+#menu ul li{
+  margin-top: 5px;
+  display: inline-table;
+}
+
+#menu ul li a{
+  color: #FFFFFF;
+  font-size: 115%;
+  text-decoration: none;
+  margin: 0 25px 0 25px;
+}
+
+#menu ul li a:visited{
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+#menu ul li a:hover{
+  text-decoration: none;
+  color: #b87138;
+}
+
+#submenu{
+  background: #331612 url('submenu.jpg') no-repeat left;
+  margin-top: 0px;
+  height: 30px;
+}
+
+#submenu ul{
+  margin: 0px;
+  text-align: center;
+  list-style: none;
+}
+
+#submenu ul li{
+  margin-top: 5px;
+  display: inline-table;
+}
+
+#submenu ul li a{
+  color: #FFFFFF;
+  font-size: 100%;
+  text-decoration: none;
+  margin: 0 25px 0 25px;
+}
+
+#submenu ul li a:visited{
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+#submenu ul li a:hover{
+  text-decoration: none;
+  color: #b87138;
+}
+
+#content{
+  margin: 10px;
+}
+
+#content img{
+ margin: 5px; 
+}
+#content ol{
+  list-style-type: none;
+}
+
+#obsah {
+    width: 80%;
+    float: right;
+}
+
+#novinky {
+    width: 18%;
+    float: left;
+}
+
+#mapa {
+ list-style-type: disc; 
+}
+
+.aktualni{
+ color: #b87138;
+}
+
+#foot {
+  clear: both;
+  text-align: center;
+  color: #FFFFFF;
+  font-size: 85%;
+  line-height: 40px;
+  background: #331612 url('foot.jpg') no-repeat left;
+}
+
+#foot a {
+  color: inherit;
+}
+
+#foot a:visited{
+  color: #FFFFFF;
+}
+
+#foot p {
+  display: inline;
+}

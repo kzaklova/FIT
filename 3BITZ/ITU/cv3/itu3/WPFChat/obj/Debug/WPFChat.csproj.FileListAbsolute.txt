@@ -1,0 +1,30 @@
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\bin\Debug\WPFChat.exe
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\bin\Debug\WPFChat.pdb
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\MainWindows.baml
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\MainWindows.g.cs
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\App.g.cs
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\WPFChat_MarkupCompile.cache
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\WPFChat.g.resources
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\WPFChat.Properties.Resources.resources
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\WPFChat.csproj.GenerateResource.Cache
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\WPFChat.exe
+C:\Users\Kati\Documents\Visual Studio 2008\itu3\WPFChat\obj\Debug\WPFChat.pdb
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\WPFChat.exe
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\WPFChat.pdb
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\bin\Debug\WPFChat.exe
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\bin\Debug\WPFChat.pdb
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\bin\Debug\Newtonsoft.Json.dll
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\bin\Debug\Newtonsoft.Json.pdb
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\bin\Debug\Newtonsoft.Json.xml
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\MainWindows.baml
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\MainWindows.g.cs
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\App.g.cs
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\WPFChat_MarkupCompile.cache
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\WPFChat.g.resources
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\WPFChat.Properties.Resources.resources
+C:\Documents and Settings\xzaklo00\My Documents\itu3\itu3\WPFChat\obj\Debug\WPFChat.csproj.GenerateResource.Cache
