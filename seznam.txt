@@ -1,0 +1,113 @@
+(c) Kateřina Zaklová, 2010-2014
+
+UPOZORNĚNÍ:
+Zdrojové kódy jsou určeny ke studijn­ím účelům, ne ke kopírování. Plagiátorstv­í je na FIT VUT přísně trestáno (nulové hodnocení projektu, odebrání zápočtu, podmíněné vyloučení)!
+
+1BIT
+  Zimní semestr
+    ITO
+      Semestrální projekt (13/15)
+
+    IUS
+      Dokumentace k 2. projektu z IZP (8/10)
+      Model informačního systému - 06. Pekárna (19/20)
+
+    IZP
+       Převod časových údajů (5/5)
+       Iterační výpočty (9.25/10)
+       Maticové operace (8.25/10)
+       České řazení (8/8)
+
+  Letní semestr
+    IFY
+      Bonifikační příklady (5/5)
+
+    INC
+      Přístupový terminál (20/20)
+
+    IOS
+      Skript na testování souborů v bashi (15/15)
+      Problém spícího holiče v C (12/15)
+
+    ITW
+      Projekt 1 - CSS (19/20)
+      Projekt 2 - Webová stránka knihkupectví (27/30)
+
+    ITY
+      Projekt 1 (9.5/10)
+      Projekt 2 (12/15)
+      Projekt 3 (13.5/15)
+      Projekt 4 - knižní citace (14/15)
+      Projekt 5 - prezentace (15/15)
+
+2BIT
+  Zimní semestr
+    IAL
+      DÚ 1 - jednosměrný a obousměrný lineární seznam, zásobník (9/10)
+      DÚ 2 - BVS rekurzivně a nerekurzivně, hash tabulka (10/10)
+
+    IFJ
+      Interpret jazyka Lua (17/20)
+      Dokumentace k projektu (4.3/5)
+      Prezentace k obhajobě (10/10)
+
+    INP
+      Řízení maticového displeje (12/12)
+      Procesor s jednoduchou instrukční sadou - jazyk BrainFuck (16/16)
+
+    ISS
+      Analýza obrazu (12/12)
+
+  Letní semestr
+    IDS
+      Prezentace - tvorba ER diagramu (8)
+      Obhajoba konceptuálního modelu (5/5)
+      SQL skript pro vytvoření databáze (5/5)
+      SQL skript s dotazy SELECT (3/5)
+      Realizace projektu (10/20)
+
+    IPK
+      Klient protokolu HTTP (6/6)
+      Jednoduchý klient/server - Program pro vyhledání informací o uživatelích Unixového OS (8/8)
+      Spolehlivá komunikace (7/10)
+
+    IPP
+      JSN to XML - skript v Perlu (8/10)
+      XML to DDL - skript v Pythonu (13/10)
+
+    IZG
+      Cvičení (18/18)
+      Phongův osvětlovací model (18/18)
+
+    IZU
+      Prohledávání stavového prostoru metodou A* (6/6)
+      Prolog (7/7)
+      Lisp (7/7)
+
+3BIT
+  Zimní semestr
+    IIS
+      Informační systém pekárny (24/30), online verze
+
+    IMP
+      Cvičení (15/16) pozn. zdrojáky jsou správně, bod jsem ztratila na doplňující otázce :-)
+      Kalkulátor pro FITkit (13/14)
+
+    IMS
+      Workflow procesů ve státní administrativě (18/20)
+
+    ISA
+      Programování síťové služby - Traceroute (21/21)
+
+    ITU
+      Cvičení (25/25)
+      Týmový projekt - Android aplikace Publocator (46/55)
+
+  Letní semestr
+    IVH
+      Týmový projekt - Ledcube (90/100)
+
+    IVS
+      Projekt 1 - Testování softwaru (15/17)
+      Projekt 2 - git, knihovny, make, debugging, profiling, dokumentace (21/23)
+      Projekt 3 - týmová spolupráce - kalkulačka (26/30)
