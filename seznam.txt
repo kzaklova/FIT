@@ -111,3 +111,11 @@ Zdrojové kódy jsou určeny ke studijn­ím účelům, ne ke kopírování. Pla
       Projekt 1 - Testování softwaru (15/17)
       Projekt 2 - git, knihovny, make, debugging, profiling, dokumentace (21/23)
       Projekt 3 - týmová spolupráce - kalkulačka (26/30)
+
+    IBP
+      Bakalářská práce - Biometrické testování živosti
+      - Zdrojové kódy pro LaTeX
+      - Zdrojový kód k porovnávání vzorků + vzorky
+      - Text BP
+      - Prezentace k BP
+      - Příspěvek + prezentace na konferenci EEICT
