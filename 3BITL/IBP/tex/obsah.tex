@@ -1,0 +1,726 @@
+%=========================================================================
+% (c) Katerina Zaklova, 2014
+
+\chapter{Úvod}
+Vyu¾ití biometrie se v~dne¹ní dobì stále více roz¹iøuje. A» u¾ se jedná o~èteèky otiskù prstù, rozpoznání oblièeje kamerou na poèítaèích a~chytrých mobilních telefonech, pøístupy do rùzných institucí nebo doklady toto¾nosti s~biometrickými údaji.
+
+V¹echny zmiòované zpùsoby identifikace spadají do situací, kde je vy¾adována urèitá míra bezpeènosti. My lidé identifikujeme ostatní osoby podle vzhledu, hlasu, chování, písma, jména nebo dokladù toto¾nosti. Pokud tuto identifikaci mají provádìt poèítaèe, pak je tøeba sledovat znaky jako zmínìné otisky prstù, rysy oblièeje, obraz duhovky nebo sítnice oka, hlas aj. Ji¾ øadu let existuje rozpoznávání na základì èipových karet, PIN kódù a~pøístupových hesel, av¹ak na¹e biometrické údaje se dají mnohem hùøe zfal¹ovat a~narozdíl od karet a~hesel je témìø nemo¾né je ztratit.
+
+Tato práce se zamìøuje pøedev¹ím na otisky prstù a~detekci ¾ivosti. Kapitola \ref{chapter:biometrie} se zabývá biometrií jako takovou a~její historií a~popisuje vlastnosti biometrických systémù. V~kapitole \ref{chapter:hodnoceni_spolehlivosti} jsou shrnuty poznatky ohlednì metod urèování spolehlivosti biometrických systémù a~následující kapitola \ref{chapter:otisky_prstu} se vìnuje samotným otiskùm prstù, zpùsobu jejich zpracování, senzorùm a~metodám pro detekci ¾ivosti. Kapitola \ref{chapter:urcovani_zivosti_podle_pachu} ji¾ zkoumá samotnou metodu detekce ¾ivosti podle tìlesného pachu a~kapitola \ref{chapter:urcovani_zivosti_podle_teploty} popisuje metodu urèování ¾ivosti pomocí teploty, implementaci aplikace na urèování ¾ivosti a~výsledky experimentù. Podrobné záznamy o~experimentech jsou pak pøilo¾eny v~pøíloze. Kapitola \ref{chapter:zaver} vyhodnocuje získané poznatky ohlednì zkoumání zmínìných metod.
+
+\chapter{Biometrie}
+\label{chapter:biometrie}
+Slovo biometrie pochází z~øeètiny a~skládá se ze slov \myuv{bios} (¾ivot) a~\myuv{metron} (mìøítko). Biometrie v~IT \cite{jain_li:encyclopedia_of_biometrics} je automatické rozpoznávání lidských jedincù na základì anatomických a~behaviorálních rysù. Mezi anatomické rysy øadíme otisk prstu, snímek duhovky, sítnice, termogram oblièeje, rysy oblièeje, geometrii ruky aj. Mezi behaviorální rysy patøí napøíklad zpùsob chùze, podpis (dynamické vlastnosti), gestikulace oblièeje nebo hlas.
+
+Biometrie má øadu kladù i~záporù, mezi klady øadíme napøíklad vy¹¹í bezpeènost a~pohodlí, ménì pokusù o~popøení identity, biometrické vlastnosti témìø nelze ztratit, pøenést nebo zapomenout, a~rovnì¾ odrazuje potenciální u¾ivatele od podvodù. Mezi zápory patøí ztráta soukromí, nutná detekce ¾ivosti, výstupem je pouze nejednoznaèné skóre porovnání, biometrické znaky nelze anulovat v~pøípadì prozrazení, biometrický systém je napadnutelný.
+
+\section{Historie}
+Pou¾ívání biometrických vlastností je známo ji¾ z~dob dávných. Témìø dennì rozpoznáváme osoby kolem nás podle jejich vzhledu a~chování. V¹echny tyto informace mù¾eme zaznamenat a~zpracovat.
+
+Nejstar¹í záznamy o~u¾ití biometrie se dochovaly z~Èíny ze 14. století na¹eho letopoètu, jedná se v¹ak pouze o~kresby na skalních stìnách nebo otisky prstù na keramice, tudí¾ se nedají pova¾ovat za prùkazný materiál. Bìhem 19. století n.l. se roz¹íøila identifikace pomocí biometrických znakù. W.~J.~Herschel zaèal v~roce 1858 pou¾ívat otisky prstù jako stvrzení od indických dìlníkù pøi pøebírání výplat \cite{drahansky_orsag:biometrie}. Pozdìji sbíral otisky prstù pro vlastní výzkum. Dal¹ím prùkopníkem v~oblasti biometrických vlastností byl F.~Galton, nejdøíve se zabýval dìdièností vlastností od rodièù, pozdìji pøi¹el s~vìdním oborem zabývajícím se mìøením èástí lidského tìla a~nakonec zavedl daktyloskopii a~prosadil ji do policejní praxe \cite{wayman_jain_maltoni_maio:biometric_systems}. V~roce 1924 do¹lo k~zalo¾ení oddìlení pro identifikaci otiskù prstù u~FBI. V~roce 1965 byl poprvé pou¾it daktyloskopický systém AFIS (\textit{Automated Fingerprint Identification System}). V~USA se nyní pou¾ívá IAFIS (\textit{Integrated Automated Fingerprint Identification System}). Tento systém nyní obsahuje asi 104 milionù otiskù prstù. Reakce na vyhledání otisku v~databázi trvá prùmìrnì 27 minut pro kriminální pøípady, pro bì¾né civilní pøípady je to 1 hodina 12 minut \cite{fbi:iafis}. Mnoho dal¹ích subjektù a~státù (Evropská Unie, Kanada, Velká Británie, Argentina, Itálie, Chile, Dánsko aj.) pou¾ívá své vlastní systémy, a~to nejen pro identifikaci zloèincù, ale i~pro kontroly dokladù, pobírání dávek, vedení databáze azylantù aj.
+
+\section{Identita, identifikace a~verifikace}
+Tyto tøi pojmy se objevují v~biometrii velmi èasto, ve zkratce si je tedy vysvìtlíme.
+
+\subsection{Identita}
+Ka¾dý z~nás má jednoznaènou charakteristiku, tu nazýváme identita \cite{rak_matyas_riha:biometrie_a_identita}. V~biometrii rozli¹ujeme mezi fyzickou a~elektronickou identitou, kde fyzická identita je definována na¹ím vzhledem a~chováním, a~pro ka¾dého èlovìka na svìtì je jedineèná. Oproti tomu, elektronických identit mù¾eme mít hned nìkolik, jedná se napøíklad o~úèty na rùzných elektronických portálech, identifikaèní karty aj.
+
+Identita je zalo¾ena na \cite{drahansky:bio_opora}:
+\begin{itemize}
+\item nìèem, co víme -- znalost (heslo, PIN, tajné tlaèítko),
+\item nìèem, co máme -- vlastnictví (klíè, èipová karta, token),
+\item nìèem, co jsme -- biometrie (vzhled, chování).
+\end{itemize}
+
+\vskip 12pt
+
+V~ohledu k~pøístupu do biometrického systému rozli¹ujeme nìkolik druhù identity \cite{drahansky_orsag:biometrie}:
+\begin{itemize}
+\item \textbf{Pozitivní} -- u¾ivatel tvrdí, ¾e je v~systému registrován a~po¾aduje do nìj pøístup.
+\item \textbf{Negativní} -- u¾ivatel tvrdí, ¾e v~systému je¹tì registrován není a~po¾aduje do nìj pøístup. Jedná se o~tzv. negativní rozpoznávání.
+\item \textbf{Implicitní} -- u¾ivatel musí svoji identitu zadat a~systém ji buï potvrdí nebo odmítne.
+\item \textbf{Explicitní} -- systém vyhledá identitu a~buï ji nalezne nebo nikoliv.
+\item \textbf{Identita právoplatného u¾ivatele} -- u~pozitivního rozpoznávání se jedná o~identitu osoby, která je zaregistrována v~systému, u~negativního rozpoznávání tato osoba je¹tì v~systému registrována není.
+\item \textbf{Identita útoèníka} -- u~pozitivního rozpoznávání je to osoba, která se sna¾í neoprávnìnì získat pøístup -- pou¾itím identity jiné osoby. U~negativního rozpoznávání se osoba sna¾í získat opakovaný nebo vícenásobný pøístup.
+\end{itemize}
+
+\subsection{Identifikace}
+Pomocí identifikace zji¹»ujeme identitu osoby \cite{rak_matyas_riha:biometrie_a_identita}. Tato osoba zadá do systému biometrickou vlastnost, ne v¹ak identitu samotnou -- tu musí rozpoznat systém. Následnì dojde k~porovnání vzorku se v¹emi vzorky ulo¾enými v~databázi, a~pokud do¹lo ke shodì, systém nám sdìlí identitu nebo seznam kandidátù. V~opaèném pøípadì skonèí s~výsledkem nenalezené identity. Toto porovnání nazýváme 1:N nebo 1:MANY. Pøíkladem identifikaèních systémù mù¾e být AFIS nebo databáze azylantù.
+
+\subsection{Verifikace}
+Jedná se o~ovìøování fyzické identity na základì poskytnuté elektronické identity \cite{rak_matyas_riha:biometrie_a_identita}. Po porovnání aktuálního a~referenèního vzorku systém buï povolí u¾ivateli pøístup nebo jej zamítne. Toto porovnání nazýváme 1:1. Pøíkladem verifikace mù¾e být pøístupový systém do továrny nebo pøihlá¹ení k~emailové slu¾bì.
+
+S~vý¹e zmínìnými pojmy souvisí takté¾ autentizace. Tento proces potvrzuje hodnovìrnost osoby a~mù¾eme se s~ním setkat u~systémù pro identifikaci i~verifikaci, napøíklad pøístupové nebo daktyloskopické systémy.
+ 
+\section{Biometrický systém}
+\label{section:biometricky_system}
+Biometrický systém obecnì sestává ze dvou modulù \cite{drahansky:bio_opora}:
+\begin{itemize}
+\item registraèní modul,
+\item verifikaèní/identifikaèní modul.
+\end{itemize}
+
+Nejdøíve je nutné vlo¾it identitu u¾ivatele do registraèního modulu, poté je mo¾né pou¾ívat verifikaèní/identifikaèní modul.
+
+Oba moduly se skládají z~nìkolika èástí -- biometrický senzor, biometrický markant, porovnávací modul a~databáze (viz obrázek \ref{img:biometricky_system}).
+\begin{itemize}
+\item \textbf{Biometrický senzor} -- zaji¹»uje získání vzorku a~pøevedení do elektronické podoby, je souèástí registraèního i~verifikaèního/identifikaèního modulu.
+\item \textbf{Biometrický markant} -- extrahuje rysy z~biometrického vzorku na vstupu, èasto rovnì¾ vylep¹uje kvalitu získaných dat, stejnì jako senzor patøí obìma modulùm.
+\item \textbf{Porovnávací modul} -- porovnává rysy biometrických markantù se vzorky ulo¾enými v~databázi. Na základì míry shodnosti vzorkù pak obdr¾íme výsledek.
+\item \textbf{Databáze} -- registraèní modul do ní ukládá vzorky, verifikaèní/identifikaèní modul potom pou¾ívá tato ulo¾ená data k~porovnání s~aktuálními vzorky na vstupu. 
+\end{itemize}
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.62}{\includegraphics{fig/system.pdf}}
+\caption{Blokové schéma biometrického systému.}
+\label{img:biometricky_system}
+\end{center}
+\end{figure}
+
+Ka¾dý biometrický systém má v¹ak i~své slabiny. Tato slabá místa jsou znázornìna na obrázku \ref{img:slaba_mista}.
+\begin{enumerate}
+\item \textbf{Podvr¾ení biometrické vlastnosti} -- útoèník pøedlo¾í senzoru padìlek biometrické charakteristiky, napøíklad umìlý prst.
+\item \textbf{Replikace starých dat} -- jedná se o~opìtovné zaslání ji¾ pou¾itého vzorku, útoèník zachytává signály mezi senzorem a~extraktorem a~následnì pronikne do systému.
+\item \textbf{Modifikace extrakce rysù} -- funkce pro extrakci markantù mù¾e být útoèníkem modifikována, aby produkovala jím zvolené výsledky.
+\item \textbf{Syntetický vektor rysù} -- jde o~modifikaci/zámìnu biometrických vlastností, které byly získány z~extraktoru, musíme ale znát reprezentaci tìchto dat.
+\item \textbf{Zmìna porovnání} -- hodnotu prahu porovnání nastavuje útoèník dle vlastní potøeby.
+\item \textbf{Modifikace ¹ablony} -- vzorek ulo¾ený v~databázi je nahrazen nebo pozmìnìn, poté dojde k~úspì¹nému rozpoznání.
+\item \textbf{Blokování kanálu} -- útoèník napadne cestu mezi porovnávacím modulem a~databází a~zamìní nebo upraví data, která si tyto dva moduly vymìòují. V~podstatì se jedná o~DoS (\textit{Denial of service}) útok.
+\item \textbf{Zmìna výsledku} -- útoèník doká¾e zamìnit výsledek celé operace, tím pádem systém úplnì odstaví.
+\end{enumerate}
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.62}{\includegraphics{fig/weak.pdf}}
+\caption{Slabá místa v~biometrickém systému.}
+\label{img:slaba_mista}
+\end{center}
+\end{figure}
+
+Charakteristiky, které lze rozpoznat biometrickým systémem, dìlíme na anatomické a~behaviorální, jak ji¾ bylo øeèeno v~úvodu kapitoly \ref{chapter:biometrie}. Anatomické vlastnosti, zvané také statické, jsou vlastnosti pevné, které nelze lehce ovlivnit. Naproti tomu vlastnosti behaviorální, jinak zvané dynamické, jsou lehce ovlivnitelné, nebo» jsou spojeny s~akcí u¾ivatele.
+
+Na základì sledování tìchto vlastností dìlíme biometrické systémy na unimodální a~multimodální systémy \cite{wayman_jain_maltoni_maio:biometric_systems}.
+
+\textbf{Unimodální biometrický systém} snímá pouze jednu biometrickou charakteristiku. Jeho nevýhodou je ni¾¹í spolehlivost, av¹ak náklady na jeho poøízení jsou také ni¾¹í.
+
+\textbf{Multimodální biometrický systém} vyu¾ívá kombinace nìkolika biometrických vlastností (napøíklad snímání oblièeje a~duhovky oka) nebo více pøíznakù jedné vlastnosti (napøíklad dynamické a~statické vlastnosti podpisu), tyto vlastnosti jsou poté zpracovány prostøednictvím algoritmù daného snímaèe. Takový systém je jednak více spolehlivý a~odolnìj¹í proti útokùm a~fal¹ování, také je v¹ak mnohem dra¾¹í.
+
+Dùle¾ité kritérium pro nasazení biometrického systému jsou charakteristiky biometrických vlastností \cite{drahansky_hejtmankova:rozpoznavani_podle_otisku_prstu}.
+\begin{itemize}
+\item \textbf{Univerzalita (U)} -- ka¾dý èlovìk má danou biometrickou vlastnost.
+\item \textbf{Jedineènost (J)} -- ¾ádní dva lidé nemají toto¾nou biometrickou vlastnost.
+\item \textbf{Konstantnost (K)} -- daná biometrická vlastnost se nemìní s~èasem.
+\item \textbf{Získatelnost (Z)} -- biometrickou vlastnost je mo¾né kvantitativnì zmìøit. 
+\item \textbf{Výkonnost (V)} -- biometrická vlastnost se nemìní ani nestárne (ovlivòuje výkon systému).
+\item \textbf{Akceptovatelnost (A)} -- èlovìk je ochotný nechat se nasnímat.
+\item \textbf{Odolnost proti útokùm (O)} -- míra obtí¾nosti vytvoøení fale¹né kopie dané biometrické vlastnosti.
+\item \textbf{Náklady (N)} -- finanèní zátì¾ pøi poøízení a~údr¾bì biometrického systému.
+\item \textbf{Dal¹í aspekty} -- spolehlivost (osvìtlení, teplota, brýle, èepice, zranìní aj.), údr¾ba, dostupnost, pou¾itelnost, anonymita aj.
+\end{itemize}
+
+Souhrn jednotlivých charakteristik v~souvislosti s~biometrickými vlastnostmi znázoròuje tabulka \ref{tab:charakteristiky_vlastnosti}.
+% top table
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+
+\begin{table}[ht!]
+\begin{center}
+\begin{tabular}{| c | c | c | c | c | c | c | c | c |} \hline
+& \textbf{U} & \textbf{J} & \textbf{K} & \textbf{Z} & \textbf{V} & \textbf{A} & \textbf{O} & \textbf{N} \\ \hline
+\textbf{Oblièej} & vysoká & nízká & støe	dní & vysoká & nízká & vysoká & nízká & nízké \\ \hline
+\textbf{Otisk prstu} & støední & vysoká & vysoká & støední & vysoká & støední & vysoká & nízké \\ \hline
+\textbf{Geom. ruky} & støední & støední & støední & vysoká & støední & støední & støední & støední \\ \hline
+\textbf{®íly ruky} & støední &  støední &  støední & støední & støední & støední & vysoká & støední \\ \hline
+\textbf{Duhovka} & vysoká & vysoká & vysoká & støední & vysoká & nízká & vysoká & vysoké \\ \hline
+\textbf{Sítnice} & vysoká & vysoká & støední & nízká & vysoká & nízká & vysoká & vysoké \\ \hline
+\textbf{Podpis} &  nízká & nízká & nízká & vysoká & nízká & vysoká & nízká & nízké \\ \hline
+\textbf{Hlas} & støední & nízká & nízká & støední & nízká & vysoká & nízká & nízké \\ \hline
+\textbf{Termogram} & vysoká & vysoká & nízká & vysoká & støední & vysoká & vysoká & vysoké \\ \hline
+\end{tabular}
+\caption{Vlastnosti biometrických charakteristik \cite{drahansky_orsag:biometrie}.}
+\label{tab:charakteristiky_vlastnosti}
+\end{center}
+\end{table}
+
+\chapter{Hodnocení spolehlivosti biometrických systémù}
+\label{chapter:hodnoceni_spolehlivosti}
+Charakteristiky biometrických vlastností jsme si ji¾ uvedli, pokud v¹ak potøebujeme spolehlivý biometrický systém, je tøeba otestovat i~konkrétní zaøízení. Pro testování spolehlivosti bylo zavedeno nìkolik metrik, ke kterým se dostaneme pozdìji.
+
+V~úvodu kapitoly \ref{chapter:biometrie} bylo øeèeno, ¾e v~biometrii rozli¹ujeme tøi typy klasifikace \cite{rak_matyas_riha:biometrie_a_identita}:
+\begin{itemize}
+\item \textbf{verifikace} -- ptáme se, zda mno¾ina rysù \textit{R} patøí k~osobì \textit{O} z~celkového poètu osob \textit{N},
+\item \textbf{identifikace} -- ptáme se, která mno¾ina rysù \textit{R} z~celkového poètu osob \textit{N} patøí osobì \textit{O},
+\item \textbf{rozpoznávání} -- ptáme se, které tøídì patøí sémantický obsah rysù \textit{R}.
+\end{itemize}
+
+V~ideálním pøípadì nedojde pro biometrický systém k~¾ádné chybì, prakticky je v¹ak tento stav nemo¾ný. Problémem je zmìøení pøesnosti.
+
+Extrahovaný vzorek je porovnáván se ¹ablonou v~systému a~jako výsledek dostaneme skóre porovnání \textit{s}, co¾ je míra shody obou vzorkù. Celkový výsledek pak závisí na nastavení prahu systému, pokud skóre spadá do rozsahu pro pøijetí, jedná se o~shodu (viz obrázek \ref{img:prah_a_skore_porovnani}).
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.75}{\includegraphics{fig/prah.pdf}}
+\caption{Oblast pøijetí a~odmítnutí v~závislosti na prahu \textit{T} a~skóre porovnání \textit{s} \cite{drahansky_orsag:biometrie}.}
+\label{img:prah_a_skore_porovnani}
+\end{center}
+\end{figure}
+
+Na základì porovnání mù¾eme dojít k~následujícím výsledkùm \cite{reid:biometrics_for_network_security}:
+\begin{itemize}
+\item \textbf{Správné pøijetí} -- osoba A~je pøijata jako osoba A~(angl. \textit{true acceptance}).
+\item \textbf{Správné odmítnutí} -- osoba A~je odmítnuta jako osoba B (angl. \textit{true rejection}).
+\item \textbf{Chybné pøijetí} -- osoba A~je pøijata jako osoba B (angl. \textit{false acceptance}).
+\item \textbf{Chybné odmítnutí} -- osoba A~je odmítnuta jako osoba A~(angl. \textit{false rejection}).
+\end{itemize}
+
+Je zøejmé, ¾e ve dvou pøípadech se jedná o~chybu -- chybné pøijetí a~chybné odmítnutí. Pro hodnocení tìchto chyb pou¾íváme následující metriky.
+
+\section{FAR -- Míra chybného pøijetí}
+FAR, \textit{False Acceptance Rate}, je pravdìpodobnost, ¾e biometrický systém klasifikuje dva odli¹né biometrické vzory jako shodné, a~tím zpùsobí selhání pøi pøijetí mo¾ného útoèníka. Do celkového poètu porovnání zapoèítáváme i~pokusy, které selhaly je¹tì pøed samotným porovnáním.
+
+Míru chybného pøijetí spoèítáme:
+
+\begin{equation}
+FAR = {\text{Poèet porovnání rozdílných vzorù vedoucích ke shodì}}{\text{Celkový poèet porovnání rozdílných vzorù}}
+\end{equation}
+
+\section{FRR -- Míra chybného odmítnutí}
+FRR, \textit{False Rejection Rate}, je pravdìpodobnost, ¾e biometrický systém klasifikuje dva shodné biometrické vzory jako odli¹né a~tím zpùsobí selhání pøi odmítnutí oprávnìného u¾ivatele.
+
+Míru chybného odmítnutí spoèítáme:
+
+\begin{equation}
+FRR = \frac{\text{Poèet porovnání shodných vzorù vedoucích k~neshodì}}{\text{Celkový poèet porovnání shodných vzorù}}
+\end{equation}
+
+\section{FMR -- Míra chybné shody}
+Definice FMR, \textit{False Match Rate}, se shoduje s~definicí FAR, je zde v¹ak rozdíl -- do celkového poètu porovnání nezapoèítáváme pokusy, které selhaly pøed porovnáním samotným. Vzorec pro výpoèet je obdobný jako pro metriku FAR.
+
+\section{FNMR -- Míra chybné neshody}
+Definice FNMR, \textit{False Non-Match Rate}, je identická s~definicí FRR, rovnì¾ zde ale do celkového poètu porovnání nezapoèítáváme pokusy, které selhaly je¹tì pøed porovnáním. FNMR vypoèítáme podle obdobného vzorce jako FRR.
+
+\vskip 12pt
+
+V¹echny zmínìné míry se pou¾ívají pro mìøení výkonnosti biometrických systémù. Závisí na nastavení porovnávacího prahu \textit{T} a~typicky se pou¾ívají u~ROC (\textit{Receiver Operating Curve}) a~DET (\textit{Detection Error Trade-off}) køivek \cite{reid:biometrics_for_network_security}. U~ideálního systému by neexistovalo ¾ádné chybné pøijetí ani chybné odmítnutí. Takový systém v¹ak neexistuje. Proto musíme chybovost regulovat nastavením prahu. Pokud posuneme práh na vy¹¹í hodnotu, zvý¹í se i~FRR, tím pádem vzroste poèet pøípadù, kdy systém odmítne oprávnìného u¾ivatele. Zároveò ale klesne FAR a~sní¾í se i~poèet pøípadù, kdy systém povolí pøístup nepovolaným u¾ivatelùm. Ideální hodnota prahu se nazývá \textbf{EER} (\textit{Equal Error Rate}, míra vyrovnanosti chyb) a~jedná se o~bod, kde jsou FAR i~FRR na stejné míøe (viz obrázek \ref{img:equal_error_rate}).
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.5}{\includegraphics{fig/eer.pdf}}
+\caption{Závislost metrik FAR a~FRR \cite{reid:biometrics_for_network_security}.}
+\label{img:equal_error_rate}
+\end{center}
+\end{figure}
+
+\section{ROC køivka}
+ROC, \textit{Receiver Operating Curve}, je míra, která se nejèastìji pou¾ívá pro vyjádøení výkonnosti systému. Umo¾òuje snadné srovnání rùzných biometrických systémù a~v~souèasné dobì je standardem pro popis jejich vlastností. ROC køivky nejèastìji zobrazují FNR vùèi FNMR nebo FRR vùèi FAR. Køivka zároveò ma¾e závislost vyná¹ených hodnot na prahu rozhodování.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.5}{\includegraphics{fig/roc.pdf}}
+\caption{ROC køivka \cite{idiap_research_institute:performance_evaluation}.}
+\end{center}
+\end{figure}
+
+\section{DET køivka}
+DET, \textit{Detection Error Trade-Off}, je ekvivalentem pro ROC køivku. Rovnì¾ se pou¾ívá pro vyjádøení výkonnosti systému, li¹í se v¹ak reprezentace hodnot zaná¹ených do grafu.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.5}{\includegraphics{fig/det.pdf}}
+\caption{DET køivka \cite{idiap_research_institute:performance_evaluation}.}
+\end{center}
+\end{figure}
+
+\chapter{Otisky prstù}
+\label{chapter:otisky_prstu}
+Ka¾dý z~nás má na povrchu prstù \textbf{papilární linie}. Jedná se o~vyvý¹ené reliéfy kù¾e (vysoké 0,1 -- 0,4 mm) \cite{bonfig_drahansky:biometrie}, které se formují ji¾ v~embryonálním vývoji. Struktura papilárních linií je pro ka¾dého èlovìka unikátní (i~v~pøípadì dvojèat) -- to umo¾òuje podle nich rozli¹ovat jednotlivé osoby mezi sebou. 
+
+Ji¾ v~kapitole \ref{chapter:biometrie} bylo zmínìno, ¾e první záznamy o~pou¾ití otiskù prstù se dochovaly z~Èíny ze 14. století n.l. Umìlci si tímto zpùsobem oznaèovali vyrobenou keramiku. J.~Ch.~A.~Mayer v~roce 1977 publikoval dílo o~jedineènosti otiskù prstù u~lidí. V~roce 1823 J.~E.~Purkynì rozdìlil otisky do devíti tøíd \cite{wayman_jain_maltoni_maio:biometric_systems}, av¹ak nezmínil mo¾nost vyu¾ití otiskù pro identifikaci lidí. Pro identifikaci jako takovou je zaèal pou¾ívat a¾ W.~J.~Herschel v~druhé polovinì 19. století n.l. Roku 1880 navrhl H.~Faulds pou¾ívání otiskù k~identifikaci osob, pøièem¾ otisky byly získávány pomocí inkoustu. V~roce 1891 zavedl J.~Vucetich pou¾ívání otiskù pro kriminalistické úèely. F.~Galton se rovnì¾ zabýval otisky prstù, vydal o~nich knihu a~také se zabýval pravdìpodobností shody dvou otiskù.
+
+\vskip 12pt
+
+Na základì výzkumu byly v~oboru daktyloskopie stanoveny tyto zákony \cite{drahansky:bio_opora}:
+\begin{itemize}
+\item ®ádní dva lidé na svìtì nemají otisky prstù se stejnou strukturou papilárních linií.
+\item Struktura papilárních linií se za celý ¾ivot èlovìka nemìní.
+\item Papilární linie nelze pozmìnit nebo odstranit, je to mo¾né pouze za pøedpokladu, ¾e poru¹íme epidermální vrstvu kù¾e.
+\item Ve¹keré zmìny ve struktuøe linií jsou natolik malé, ¾e spadají pod limit tolerance a~nebrání klasifikaci.
+\end{itemize}
+
+\section{Charakteristiky otisku prstu}
+Existují tøi typy otiskù prstù (viz obrázek \ref{img:otisky_prstu}):
+\begin{itemize}
+\item válený (barvený, rolovaný),
+\item píchaný (¾ivý),
+\item latentní (skrytý).
+\end{itemize}
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.23}{\includegraphics{fig/fp.pdf}}
+\caption{Otisky prstù: válený (a, b), píchaný (d, e), latentní (c) \cite{drahansky:fingerprint_recognition_technology}.}
+\label{img:otisky_prstu}
+\end{center}
+\end{figure}
+
+Nìkteré otisky prstù v¹ak nejsou vhodné pro automatické rozpoznávání, napøíklad u~lidí, kteøí trpí ko¾ními onemocnìními nebo mají poranìná bøí¹ka prstù v~takové míøe, ¾e jsou po¹kozeny jejich papilární linie.
+
+Podle vzoru, který vytváøejí papilární linie, rozli¹ujeme následující \textbf{tøídy otiskù prstù}:
+\begin{itemize}
+\item oblouk (\textit{arch}),
+\item klenutý oblouk (\textit{tended arch}),
+\item spirála/závit/vír (\textit{whorl}),
+\item levá smyèka (\textit{left loop}),
+\item pravá smyèka (\textit{right loop}),
+\item dvojitá smyèka (\textit{twin loop}).
+\end{itemize}
+
+Nìkteré ze zmínìných tøíd znázoròuje obrázek \ref{img:tridy_otisku_prstu}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.25}{\includegraphics{fig/tridy.pdf}}
+\caption{Tøídy otiskù prstù \cite{drahansky:bio_opora}.}
+\label{img:tridy_otisku_prstu}
+\end{center}
+\end{figure}
+
+V~systémech AFIS pro klasifikaci otiskù se pou¾ívá Henryho klasifikaèní schéma, to pracuje pouze se tøemi základními tøídami -- oblouk, smyèka a~vír. Dal¹í tøídy jsou potom odvozeny od tøíd základních. Klasifikaèní systém byl pojmenován podle E. Henryho, který se takté¾ vìnoval výzkumu otiskù prstù.
+
+Pro klasifikaci otiskù v~daktyloskopických systémech se pou¾ívají v¹echny tøídy kromì dvojité smyèky. 
+
+Klasifikace funguje na základì nìkolika znakù (viz obrázek \ref{img:rysy_otisku_prstu}) \cite{drahansky_hejtmankova:rozpoznavani_podle_otisku_prstu}:
+\begin{itemize}
+\item \textbf{Delta} -- místo v~otisku, ve kterém probíhají papilární linie do tøí smìrù (mohou se vyskytnout i~dvì delty).
+\item \textbf{Jádro} -- støed otisku, najdeme ho v~místì nejspodnìj¹ího vyklenutí papilárních linií.
+\item \textbf{Typové linie} -- oznaèují prostor mezi nejspodnìj¹í linií patøící k~deltì a~najsvrchnìj¹í linií patøící ke støedu.
+\end{itemize}
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.5}{\includegraphics{fig/rysy.pdf}}
+\caption{Rysy otiskù prstù: delta $\Delta$, jádro $\bigcirc$, typové linie -- -- -- \cite{drahansky_hejtmankova:rozpoznavani_podle_otisku_prstu}.}
+\label{img:rysy_otisku_prstu}
+\end{center}
+\end{figure}
+
+Otisky prstù rozli¹ujeme na základì markantù. \textbf{Markanty} jsou speciální útvary vytváøené papilárními liniemi. Druhy markantù jsou znázornìny na obrázku \ref{img:markanty}. Mezi základní typy markantù patøí \cite{drahansky_orsag:biometrie}:
+\begin{itemize}
+\item \textbf{ukonèení} (\textit{line ending}, a),
+\item \textbf{jednoduchá vidlièka/rozdvojení} (\textit{simple bifurcation}, b).
+\end{itemize}
+
+\vskip 12pt
+
+Jako dal¹í pøíklady markantù lze uvést \cite{drahansky_orsag:biometrie}:
+
+\begin{itemize}
+\item dvojitá vidlièka (\textit{double bifurcation}, c),
+\item trojitá vidlièka (\textit{triple bifurcation}, d),
+\item hák (\textit{hook}, e),
+\item køí¾ení (\textit{crossing}, f),
+\item boèní kontakt (\textit{side contact}, g),
+\item bod (\textit{point}, h),
+\item interval (\textit{interval}, i),
+\item jednoduchá smyèka (\textit{single whorl}, j),
+\item dvojitá smyèka (\textit{double whorl}, k),
+\item jednoduchý most (\textit{single bridge}, l),
+\item dvojitý most (\textit{twin bridge}, m),
+\item prùseèná linie (\textit{through line}, n).
+\end{itemize}
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.25}{\includegraphics{fig/markanty.pdf}}
+\caption{Typy markantù. Horní øada zleva: a, b, c, d, e, f, g, dolní øada zleva: h, i, j, k, l, m, n \cite{drahansky:bio_opora}.}
+\label{img:markanty}
+\end{center}
+\end{figure}
+
+U~pøístupových systémù se pou¾ívá pouze ukonèení a~vidlièka, naopak u~daktyloskopických systémù je vyu¾íváno mnohem více markantù, ne¾ zde uvedené.
+
+Smìr, ve kterém by v~markantu pokraèovala papilární linie, nazýváme \textbf{orientace markantu} \cite{drahansky_hejtmankova:rozpoznavani_podle_otisku_prstu}. Pro vyznaèení orientace se pou¾ívají dvì notace: standardní a~FBI/AFIS (viz obrázek \ref{img:orientace_markantu}).
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.3}{\includegraphics{fig/orientace.pdf}}
+\caption{Orientace markantu: standardní a~FBI notace \cite{drahansky:bio_opora}.}
+\label{img:orientace_markantu}
+\end{center}
+\end{figure}
+
+\section{Zpracování otiskù prstù}
+Jak bylo popsáno v~podkapitole \ref{section:biometricky_system}, ka¾dý biometrický systém se skládá ze dvou modulù -- registraèního a~identifikaèního/verifikaèního. U¾ivatel se obvykle registruje tak, ¾e nìkolikrát (zpravidla 3-5x) pøilo¾í prst na plochu snímaèe, pøièem¾ systém dané vzorky zprùmìruje takovým zpùsobem, aby získal co nejkvalitnìj¹í ¹ablonu. Proces identifikace/verifikace probíhá obdobným zpùsobem, ale mù¾e dojít k~situaci, kdy otisky prstù od rùzných u¾ivatelù budou podobné, nebo naopak, otisky prstù pocházející ze stejného prstu budou odli¹né.
+\newline
+\newline Zpracování otisku prstu probíhá v~nìkolika krocích \cite{wayman_jain_maltoni_maio:biometric_systems}:
+\begin{itemize}
+\item \textbf{Vstupní obraz} -- Jde o~získání obrazu otisku prstu ze senzoru, pøípadnì z~jiné pøedlohy. Dostaneme digitální formu otisku, která obsahuje mno¾ství ¹umu. Tento ¹um je tøeba následnì odstranit. Je dùle¾ité sledovat, zda snímáme válené, píchané nebo latentní otisky prstù a~rovnì¾ je nutné dbát na zneèi¹tìní prstu, poranìní a~dal¹í vlivy. Zároveò musíme kontrolovat, zda se jedná o~¾ivý prst nebo napøíklad fale¹ný otisk nalepený na ¾ivém prstu.
+\item \textbf{Pole orientací} -- Nejdøíve se z~okolí pro ka¾dý bod v~obrazu vypoèítá smìr papilární linie (pokud se na ní bod pøímo nachází, urèuje její smìr), poté je aplikována transformace na blokové pole orientací, které je následnì namapováno na pùvodní obraz otisku prstu.
+\item \textbf{Extrahované linie} -- Obraz je znovu upraven a~výsledkem jsou èernobílé papilární linie. Mezi zmínìné úpravy patøí napøíklad ¹kálování histogramu a~kontrola kvality vstupního vzorku. Pro filtrování u~pole orientací je vyu¾ívána 2D Gaborova funkce, ve frekvenèní doménì se potom pou¾ívá dolní propust, filtr Butterworth, filtr Ikonomopoulos nebo filtr Sherlock. Pro prahování obrazu slou¾í mimojiné tzv. schéma RAT (\textit{Regional Average Thresholding}). To rozdìlí obrázek na bloky 8$\times$8 pixelù, vypoèítá v~tìchto oblastech prùmìrnou hodnotu ¹edé, pro levou èást 8$\times$4 pixelù nastaví tuto hodnotu ¹edé a~posune se o~4 pixely vpravo. Po dosa¾ení pravého okraje se posune o~8 pixelù dolù a~zaène opìt analogicky.
+\item \textbf{Ztenèené linie} -- Dojde ke ztenèení papilárních linií na 1 pixel, k~tomu je vyu¾íván algoritmus, který sní¾í poèet pixelù na obrazu papilární linie tak, aby mìla tlou¹»ku pouze 1 pixel. Papilární linie v¹ak nesmìjí ubývat v~¾ádném smìru. Mezi nejpou¾ívanìj¹í metody pro ztenèení papilárních linií patøí metoda Emyroglu. 
+\item \textbf{Markanty} -- Nakonec dojde k~detekci a~extrakci markantù, pracuje se pouze se dvìma základními typy markantù -- ukonèení linie a~vidlièkou; ostatní typy markantù jsou od nich odvozeny. Ke ka¾dému markantu je pak ukládána jeho pozice (souøadnice), typ (ukonèení/vidlièka) a~gradient (orientace/sklon linie), a~výsledek extrakce je porovnán se vzorkem z~databáze.
+\end{itemize}
+
+\vskip 12pt
+
+Rozli¹ujeme nìkolik druhù metod pro rozpoznávání otiskù prstù \cite{drahansky_orsag:biometrie}:
+\begin{itemize}
+\item Metody zalo¾ené na markantech -- jsou nejèastìji pou¾ívané, porovnávají dvì mno¾iny markantù. Napø. Hongova metoda staví na faktu, ¾e jednotlivé papilární linie probíhají vùèi sobì paralelnì a~maxim úrovní ¹edé dosahují právì uprostøed linie samotné. Otisk prstu je násoben dvìma maskami s~posunem fáze o~180~\textdegree C. Dal¹í metodou zalo¾enou na markantech je Rathova metoda.
+\item Metody zalo¾ené na korelaci -- jsou výpoèetnì velmi nároèné, vyu¾ívají 2D korelaci mezi vstupním obrazem a~¹ablonou v~databázi.
+\item Metody zalo¾ené na vlastnostech papilárních linií -- zkoumají tvar linií, jejich orientaci, frekvenci aj. Mají nízkou rozli¹ovací schopnost, ale èasto se pou¾ívají zároveò s~metodami zalo¾enými na markantech. 
+\end{itemize}
+
+\section{Typy senzorù}
+Aèkoliv je v~nìkterých institucích stále vyu¾íváno otisku prstu na papírovou kartu a~následné manuální nascanování do PC, moderní metody vyu¾ívají nìkolik základních typù senzorù. Sledovanými mìøítky u~tìchto senzorù je pøedev¹ím rozli¹ení, snímací plocha, poèet bitù pro kódování barvy, geometrická pøesnost a~kvalita obrazu. Tato práce se zabývá mechanickými metodami urèování ¾ivosti u~otiskù prstù, tím pádem se blí¾e zamìøíme pouze na nìkteré druhy senzorù.
+
+\subsection{Optická technologie}
+Princip této technologie je následující -- u¾ivatel pøilo¾í prst na plochu senzoru (ne v¾dy, existují i~bezkontaktní optické senzory) a~plocha prstu je osvìtlena zdrojem svìtla. Následnì kamera nasnímá obraz, který je dále zpracován.
+
+\subsection{Kapacitní technologie}
+Kapacitní senzor je slo¾en z~matice malých vodièù pokryté nevodivou vrstvou oxidu køemièitého. Tyto vodièe jsou mnohem jemnìj¹í ne¾ papilární linie na povrchu prstu. Pøilo¾ením prstu pak vzniknou nad vodièi kondenzátory a~jejich výstupem je hodnota, která odpovídá pøekryvu plochy. Princip je znázornìn na obrázku \ref{img:kapacitni_technologie}. Podobnì zalo¾ená je také e-field technologie.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.25}{\includegraphics{fig/kapacitni.pdf}}
+\caption{Kapacitní technologie \cite{drahansky_hejtmankova:rozpoznavani_podle_otisku_prstu}.}
+\label{img:kapacitni_technologie}
+\end{center}
+\end{figure}
+
+\subsection{Ultrazvuková technologie}
+Ultrazvuková technologie je postavena na ultrazvukovém rotujícím vysílaèi, který je zároveò i~pøijímaèem a~rotuje po kruhové dráze a~snímá otisk prstu. Ultrazvukové vlny doká¾í proniknout i~pod povrch prstu, tak¾e je pomìrnì snadné odhalit fale¹ný otisk/umìlý prst. Technologie je vyobrazena na obrázku \ref{img:ultrazvukova_technologie}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.22}{\includegraphics{fig/ultrasound.pdf}}
+\caption{Ultrazvuková technologie \cite{drahansky_hejtmankova:rozpoznavani_podle_otisku_prstu}.}
+\label{img:ultrazvukova_technologie}
+\end{center}
+\end{figure}
+
+\subsection{Elektrooptická technologie}
+Elektrooptický senzor \cite{jain_flynn_ross:handbook_of_biometrics} je slo¾en ze ètyø vrstev, u¾ivatel pøítlakem na plochu senzoru vybudí dotyk vrstev a~tím i~emitování svìtla, které projde do senzoru.
+
+\subsection{Tlaková technologie}
+Tlakový senzor \cite{jain_flynn_ross:handbook_of_biometrics} se skládá ze tøí vrstev, kde dvì jsou z~elektrovodivého materiálu a~mezi nì je vlo¾en nevodivý gel. Pøilo¾ením prstu na senzor pak dojde ke stlaèení gelu a~vodivé vrstvy se dotknou.
+
+\subsection{Termická technologie}
+Termická technologie \cite{jain_flynn_ross:handbook_of_biometrics} je zalo¾ena na tepelném záøení -- papilární linie prstu vyzaøují mnohem více tepla ne¾ prohlubnì mezi nimi, tyto vlastnosti snímá pyroelektrická buòka.
+
+\section{Metody detekce ¾ivosti}
+Existuje mno¾ství metod pro urèování ¾ivosti u~technologie otiskù prstù. Jsou zalo¾eny na sledování nìkteré charakteristické vlastnosti pro lidské tìlo, napøíklad elasticita nebo zmìna barvy kù¾e, spektrální vlastnosti, nasycenost krve kyslíkem, puls, pocení, tìlesný pach, teplota nebo elektrické vlastnosti kù¾e. Tato práce je zamìøena na metody mechanické, nikoliv optické, proto si pøiblí¾íme pouze nìkolik principù z~vý¹e jmenovaných.
+
+\subsection{Teplota}
+Tato pomìrnì jednoduchá metoda mìøí teplotu kù¾e prstu bìhem snímání otisku. Teplota kù¾e se v¹ak dá ovlivnit øadou faktorù. Závisí na roèním období, fyzickém a~psychickém stavu èlovìka nebo na podmínkách okolního prostøedí, tím pádem se její rozmezí mìní od 25~\textdegree C do 37~\textdegree C. Teplota kolísá i~bìhem samotného snímání, tím pádem je mìøení obtí¾nìj¹í.
+
+\subsection{Elektrické vlastnosti kù¾e}
+Princip je zalo¾en na vodivých vlastnostech kù¾e. Biometrický systém by v~takovém pøípadì musel obsahovat elektrody a~elektronickou jednotku pro vyhodnocení.
+
+Vodivost lidské kù¾e je zalo¾ena na vlhkosti, ta je ovlivòována jak fyzickým a~psychickým stavem èlovìka, tak vnìj¹ími vlivy. Bylo experimentálnì zji¹tìno, ¾e vodivost kù¾e se pohybuje od 20k$\Omega$ do 3M$\Omega$ \cite{drahansky:fingerprint_recognition_technology}. Útoèníkovi k~oklamání senzoru staèí namoèit umìlý prst do solného roztoku nebo slin a~systém ho detekuje jako prst ¾ivý.
+
+Relativní permitivita rovnì¾ závisí na vlhkosti zkoumaného materiálu, v~tomto pøípadì potenciálnímu útoèníkovi postaèí namoèit umìlý prst do roztoku tvoøeného z~90\% alkoholem a~z~10\% vodou \cite{hejtmankova:spoofing_and_antispoofing_methods}.
+
+\subsection{Bioimpedance}
+Princip vy¾aduje umístìní elektrod na pøedloktí nebo jinou èást tìla u¾ivatele \cite{drahansky:fingerprint_recognition_technology}. V~elektrodách potom probíhá støídavý proud a~mezi nimi dochází k~mìøení impedance, která závisí na zmìnì frekvence støídavého proudu. Impedance potom mù¾e odrá¾et zmìny v~krevním obìhu, srdeèní èinnost, nervovou aktivitu, krevní tlak aj. Nejèastìji pou¾ívané systémy pro mìøení bioimpedance jsou znázornìny na obrázku \ref{img:mereni_bioimpedance}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.75}{\includegraphics{fig/bioimpedance.pdf}}
+\caption{Elektrody pro mìøení bioimpedance (M -- mìøení a~pøenos proudu, CC -- pøenos proudu, PU -- zaznamenávání signálu) \cite{drahansky:fingerprint_recognition_technology}.}
+\label{img:mereni_bioimpedance}
+\end{center}
+\end{figure}
+
+\subsection{Tìlesný pach}
+Metoda je zalo¾ena na pou¾ití tzv. elektronického nosu a~poprvé ji pøedstavil D.~Baldisserra \cite{hejtmankova:spoofing_and_antispoofing_methods}. Tento pøístroj obsahuje mno¾ství malých chemických èidel, která doká¾í detekovat molekuly odpaøující se z~prstu pøilo¾eného na senzor. Zaøízení by mìlo být umístìno v~bezprostøední blízkosti snímací plochy pro otisk. Získání a~zpracování pachu trvá pøibli¾nì 10-15 sekund, a~jakmile na senzoru není ¾ádný prst, analyzuje pachy z~okolí. Tato technologie se pøi experimentech ukázala jako pomìrnì spolehlivá, problém v¹ak nastal s~fale¹nými otisky z~¾elatiny, v~tomto pøípadì senzor nedokázal rozpoznat rozdíl oproti lidské kù¾i \cite{hejtmankova:spoofing_and_antispoofing_methods}.
+
+\chapter{Urèování ¾ivosti podle tìlesného pachu}
+\label{chapter:urcovani_zivosti_podle_pachu}
+Pro výzkum v~rámci této práce byla zvolena metoda urèování ¾ivosti podle tìlesného pachu. Nejdøíve jsem se zamìøila na samotné elektronické nosy.
+
+\section{Elektronický nos}
+Elektronický nos se skládá ze tøí èástí: zavádìcí modul, detekèní modul a~výpoèetní modul. V~zavádìcím modulu je analyzován a~následnì ulo¾en do pamìti nový chemický vzorek, detekèní modul obsahuje senzory, které reagují na kontakt s~pachem, a~výpoèetní modul pak vzorek vyhodnocuje.
+
+Jak ji¾ bylo øeèeno, ka¾dý elektronický nos sestává z~pole chemických èidel pro detekci pachù. Vìt¹inou se jedná o~MOSFET tranzistory, vodivé polymery, køemíkové mikrováhy nebo systém pro mìøení povrchových akustických vln. Mù¾e jít i~o~kombinaci nìkolika zmínìných technologií. Pøi kontaktu s~konkrétním pachem nebo výparem dojde k~fyzické zmìnì senzoru. Ta je zaznamenána, pøevedena na signál a~následnì vyhodnocena.
+
+Byly zkoumány dostupné mo¾nosti ohlednì elektronických nosù. Nejznámìj¹í v~tomto odvìtví jsou následující pøístroje.
+
+\subsection{Cyranose\textsuperscript{\textregistered} 320}
+Cyranose\textsuperscript{\textregistered} 320 od americké spoleènosti Cyrano Sciences je pomìrnì kompaktní a~rychlý. Vá¾í kolem 1 kilogramu a~je schopný rozpoznat vzorek pachu pøibli¾nì bìhem 10 sekund. Pøístroj obsahuje pole 32 nanokompozitních chemických senzorù na bázi polymeru, které detekují rùzné pachy a~výpary \cite{sensigent:cyranose320}. Nejdøíve je nutné nos vytrénovat na vzorcích pachù, se kterými se bude pozdìji pracovat, ty se ukládají do vestavìné databáze. Jakékoliv pachy, se kterými se následnì pracuje, se porovnávají s~tìmito ulo¾enými vzorky \cite{sensigent:cyranose320}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.7}{\includegraphics{fig/cyranose.pdf}}
+\caption{Cyranose\textsuperscript{\textregistered} 320 \cite{sensigent:cyranose320}.}
+\end{center}
+\end{figure}
+
+\subsection{7100 zNose}
+Tento elektronický nos je velmi pøesný a~doká¾e rozpoznat vzorek v~mno¾ství men¹ím ne¾ 50 pikogramù. Analýza vzorku trvá 10-60 sekund. Jedná se v¹ak o~rozmìrný pøístroj, který vá¾í témìø 14 kilogramù \cite{electronics_sensor_technology:znose7100}, proto se domnívám, ¾e pøípadná integrace se senzorem pro snímání otiskù prstù by mohla být pomìrnì obtí¾ná.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.7}{\includegraphics{fig/znose.pdf}}
+\caption{7100 zNose \cite{electronics_sensor_technology:znose7100}.}
+\end{center}
+\end{figure}
+
+\subsection{4600 zNose}
+Jedná se o~novìj¹í variantu 7100 zNose. Zaøízení je rovnì¾ velmi pøesné v~rozpoznávání vzorkù, je v¹ak mírnì rychlej¹í. Analýza v~nejkrat¹ím pøípadì zabere pouhých 5 sekund, nejdéle mù¾e e-nose zpracovávat vzorek 60 sekund \cite{electronics_sensor_technology:znose4600}. Pøístroj je stejnì jako jeho pøedchùdce pomìrnì rozmìrný.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.55}{\includegraphics{fig/znose2.pdf}}
+\caption{4600 zNose \cite{electronics_sensor_technology:znose4600}.}
+\end{center}
+\end{figure}
+
+\subsection{Dal¹í mo¾nosti}
+V¹echny tøi pøístroje jsou velmi nákladné, proto se je¹tì nabízí mo¾nost sestrojit si vlastní senzor na snímání pachù. Takový senzor bude výraznì levnìj¹í, jeho sestrojení popisuje napø. tento èlánek \cite{macias_agudo_manso_orellana_velasco_caballero:a_compact_and_low_cost_enose}.
+
+\section{Návrh zaøízení}
+Výsledné zaøízení by mìlo sestávat z~elektronického nosu Cyranose\textsuperscript{\textregistered} 320 a~senzoru pro snímání otiskù. Senzor by mohl být kapacitní, optický nebo tlakový, elektronický nos v¹ak musí být v~jeho dostateèné blízkosti, aby bylo mo¾né detekovat pachy a~zároveò snímat otisk prstu. Rovnì¾ je tøeba se zamyslet nad umístìním elektronického nosu vùèi senzoru pro snímání otiskù, nebo» v~pøípadì, kdy útoèník pou¾ije tenký fale¹ný otisk nalepený na ¹pièce prstu, je tu potenciální mo¾nost, ¾e pøi ¹patném umístìní senzoru bude neoprávnìnì vpu¹tìn do systému. Tyto pøípady je v¹ak nutné experimentálnì ovìøit. Návrh systému zobrazuje schéma \ref{img:system_odor}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.6}{\includegraphics{fig/system_odor.pdf}}
+\caption{Systém pro snímání otiskù a~detekci ¾ivosti.}
+\label{img:system_odor}
+\end{center}
+\end{figure}
+
+Následnì by mìlo dojít k~testování nejrùznìj¹ích vzorkù: èisté prsty, osoby s~u¹pinìnými prsty od rùzných látek, osoby s~nalakovanými nehty, umìlé prsty a~pøedmìty imitující lidské prsty, fale¹né otisky nalepené na ¾ivých prstech. Nejdøíve by do¹lo ke snímání otisku samotného a~poté by byla detekována ¾ivost prstu. Na základì provedených testù by bylo vyhodnoceno, zda je metoda úspì¹ná, a~kde jsou její slabá a~silná místa.
+
+Jak ji¾ bylo zmínìno u~Cyranose\textsuperscript{\textregistered} 320, zaøízení je nutné nejprve nauèit rozpoznávat rùzné vzorky, a~a¾ na základì pachù ulo¾ených v~databázi je mo¾né vyhodnocovat vzorek k~porovnání. Senzory elektronického nosu reagují na výpary a~pachy zvìt¹ením, zmìnou vodivosti uhlíkových drah a~následným nárùstem hodnoty odporu. Zmìny odporu jsou pak zachyceny jako digitální vzor, který slou¾í pro rozli¹ení jednotlivých pachù. Jednotlivé fáze vyhodnocení prstu znázoròuje diagram \ref{img:odor_det}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.65}{\includegraphics{fig/odor_det.pdf}}
+\caption{Stavový diagram snímání prstu s~detekcí ¾ivosti podle pachu.}
+\label{img:odor_det}
+\end{center}
+\end{figure}
+
+\section{Vyhodnocení poznatkù}
+Po zhodnocení v¹ech dostupných mo¾ností jsem kontaktovala distributora Cyranose\textsuperscript{\textregistered} 320 -- spoleènost Sensigent, pro poskytnutí dal¹ích informací k~elektronickému nosu. Dodání zaøízení by v¹ak bylo zdlouhavé a~komplikované a~pravdìpodobnì bych nestihla provést potøebné experimenty v~daných termínech, proto jsem nakonec zvolila metodu urèování ¾ivosti podle teploty a~rozhodla se pokraèovat ve výzkumu ohlednì elektronických nosù v~rámci diplomové práce.
+
+\chapter{Urèování ¾ivosti podle tìlesné teploty}
+\label{chapter:urcovani_zivosti_podle_teploty}
+Vybraná metoda vyu¾ívá ke snímání teploty bezdotykový pyrosenzor nebo termokameru. Nejdøíve je tøeba poøídit snímky prstù, na základì kterých budeme urèovat teplotní vlastnosti kù¾e.
+
+\section{Pyrosenzor}
+Pyrosenzor slou¾í k~bezkontaktnímu snímání teploty pøedmìtù ve svém okolí. Pro experimenty byl dostupný senzor CEM DT-8810, který mimo jiné umo¾òuje i~laserové zamìøení snímané plochy. Senzor mìøí v~rozsahu -20~\textdegree C a¾ 270~\textdegree C.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.3}{\includegraphics{fig/pyro.pdf}}
+\caption{Mìøení pomocí pyrosenzoru.}
+\end{center}
+\end{figure}
+
+\section{Termokamera}
+Termokamery se vyu¾ívají takté¾ k~bezkontaktnímu mìøení teploty. Dochází k~analýze rozlo¾ení teplotního pole na povrchu zkoumaného pøedmìtu (v~tomto pøípadì prstu nebo náhra¾ky prstu) \cite{flir:thermal_imaging}. Ka¾dý pøedmìt, jeho¾ teplota je vìt¹í ne¾ absolutní nula, vyzaøuje energii -- kamera pak mìøí mno¾ství této infraèervené energie \cite{termokameracz:princip_a_funkce}.
+
+Termokamera se skládá z~optiky, detektoru a~elektroniky pro zpracování a~prezentaci obrazu. Optiku vìt¹inou tvoøí spojka z~germánia, nemá optický zoom a~propou¹tí jen nìkteré vlnové délky záøení. Detektor pøevádí infraèervené záøení na elektrický signál, který je následnì pøeveden na výsledný termogram pomocí elektroniky pro zpracování a~prezentaci obrazu \cite{termokameracz:princip_a_funkce_konstrukce}.
+
+\subsection{FLIR Thermacam E300}
+Pro experimenty jsem pou¾ila termokameru FLIR Thermacam E300 dostupnou v~biometrické laboratoøi. Zaøízení doká¾e mìøit v~rozsahu -20~\textdegree C a¾ 1.200~\textdegree C s~pøesností na 0,1~\textdegree C. Výsledné obrázky jsou pak v~dostateèném rozli¹ení pro dal¹í zpracování (640$\times$480 pixelù).
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.9}{\includegraphics{fig/flir.pdf}}
+\caption{FLIR Thermacam E300 \cite{redbay:flir_thermacam_e300}.}
+\end{center}
+\end{figure}
+
+\section{Mìøení}
+Pro vyhodnocování teplotních vlastností kù¾e bylo nejdøíve nutné získat dostateèné mno¾ství vzorkù. Do¹lo k~nafocení nìkolika desítek snímkù. Termokamera mìla nastavený emisní koeficient odpovídající lidské kù¾i a~pevnì daný teplotní rozsah 27~\textdegree C a¾ 35~\textdegree C, nebo» pøi pou¾ití promìnlivého rozsahu by nebylo mo¾né urèovat pøesnou teplotu. Za pøedpokladu, ¾e ka¾dý snímek by mìl jiný teplotní rozsah, docházelo by k~pøípadùm, kde by rozdílné teploty byly prezentovány stejnou hodnotou ¹edé barvy ve snímku.
+
+Jeliko¾ rozdíly mezi jednotlivými ¾ivými prsty byly minimální, snímala jsem testovaným osobám v¹ech deset prstù. Dále jsem snímala prsty s~nalepenými otisky z~gumy, silikonu, latexu a~papíru. Jako ne¾ivé imitace prstu bylo nutné vybrat pøedmìty z~rùzných materiálù s~podobným tvarem jako prst, které lze zahøát na tìlesnou teplotu, aby bylo mo¾né vysledovat rozdíly oproti ¾ivým prstùm i~jednotlivým pøedmìtùm navzájem. Zvolila jsem zapalovaè, zvýrazòovací fix, vaøeèku, l¾íci, ¹pièku de¹tníku, plastové ramínko na ¹aty a~rukoje» posuvného mìøítka. Testované subjekty musely být na levé stranì zábìru, aby nezasahovaly do stupnice, kterou kamera znázoròuje na pravé stranì fotky.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.42}{\includegraphics{fig/IR_0014.pdf}}
+\caption{®ivý prst.}
+\end{center}
+\end{figure}
+
+\section{Urèování ¾ivosti}
+Pøi porovnávání snímkù ¾ivých a~ne¾ivých prstù jsem vypozorovala, ¾e nalepený otisk na prstu v~mno¾ství pøípadù pomìrnì rychle chladne, a~nejrychleji chladne u~okrajù. Tím pádem je ¹pièka prstu s~otiskem tmav¹í ne¾ zbytek prstu, a~pokud stihne otisk více vychladnout, hranice mezi okrajem otisku a~prstem je viditelná pouhým okem. V¹echny otisky jsme pochopitelnì pøed mìøením zahøáli na tìlesnou teplotu, nìkteré z~nich v¹ak mìnily teplotu rychleji, napø. otisky z~gumy.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.42}{\includegraphics{fig/IR_0021.pdf}}
+\caption{Prst s~fale¹ným otiskem z~gumy.}
+\end{center}
+\end{figure}
+
+\newpage
+Na základì srovnání snímkù ¾ivých a~ne¾ivých prstù jsem se rozhodla urèovat ¾ivost podle nìkolika faktorù:
+\begin{itemize}
+\item porovnávání teploty v~urèených bodech na prstu,
+\item prùmìrná teplota prstu,
+\item nejteplej¹í a~nejchladnìj¹í plochy na prstu a~jejich pomìr k~celkové plo¹e prstu.
+\end{itemize}
+
+Pro ka¾dý zkoumaný pøedmìt jsem si stanovila stupnici od 0 do 100 bodù. Za \myuv{míru ¾ivosti} jednotlivých rysù pak pøièítám kladné body. U~porovnávání teploty v~bodech mù¾e pøedmìt získat 0-40 bodù, za prùmìrnou teplotu 0-30 bodù, za místa s~minimální a~maximální teplotou 0-15 bodù pro ka¾dý pøípad. V¹echna zmínìná skóre se potom seètou a~prst je urèen za ¾ivý v~pøípadì, ¾e dosáhne minimálního skóre 40 bodù.
+
+\subsection{Body pro mìøení teplotních rozdílù.}
+\label{subsec:body_pro_mereni_teploty}
+Ze zkoumaných snímkù jsem vypozorovala body na prstu, ve kterých se ve vìt¹inì pøípadù li¹ily teploty ¾ivého prstu a~falsifikátu. Tìchto bodù je celkem 6. První 4 z~nich jsou umístìny po podélné ose prstu a~mají mezi sebou vzdálenost poloviny ¹íøky prstu. Takové umístìní jsem zvolila kvùli zmínìným fale¹ným nalepeným otiskùm -- z~teploty bodù je pak patrné, ¾e na prstu je nalepené cizí tìleso. Dal¹í 2 body jsem umístila na okraji prstu ve vzdálenosti jedné ¹estiny ¹íøky prstu od støedu prstu. Body jsou naznaèeny na obrázku \ref{img:body_pro_mereni_teploty}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.42}{\includegraphics{fig/IR_0062.pdf}}
+\caption{Body pro mìøení teplotních rozdílù.}
+\label{img:body_pro_mereni_teploty}
+\end{center}
+\end{figure}
+
+\subsection{Prùmìrná teplota}
+Dal¹ím ze zkoumaných faktorù, které ovlivòují ¾ivost, je prùmìrná teplota pøedmìtu. Vypozorovala jsem, ¾e fale¹né prsty mìly v~mno¾ství pøípadù ni¾¹í prùmìrnou teplotu ne¾ prsty ¾ivé. Problém v¹ak nastane pøi mìøení osoby, která má studené ruce, proto má hodnocení tohoto faktoru pøi urèování ¾ivosti ni¾¹í váhu ne¾ body pro mìøení teplotních rozdílù.
+
+\subsection{Maxima a~minima}
+Posledním kritériem jsou teplotní minima a~maxima na prstu. U~¾ivého prstu klesá teplota více u~okrajù, u~støedu prstu je témìø stejná. Vyu¾ila jsem tedy prahování pro výpoèet nejteplej¹í plochy prstu (0,5~\textdegree C), napø. pokud má nejteplej¹í bod na prstu 34,8~\textdegree C, pak poèítám plochu pro 34,3~\textdegree C a¾ 34,8~\textdegree C a~porovnávám ji s~plochou celého prstu. Analogicky postupuji pro nejchladnìj¹í plochu prstu, nebo» ¾ivý prst je nejchladnìj¹í na svém obrysu, u~ne¾ivého prstu je tato plocha vìt¹í. Viz obrázek \ref{img:maxima_a_minima}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.35}{\includegraphics{fig/minmax.pdf}}
+\caption{Teplotní maxima (vlevo) a~minima (vpravo).}
+\label{img:maxima_a_minima}
+\end{center}
+\end{figure}
+
+\section{Implementace}
+Pro implementaci programu na porovnávání ¾ivosti jsem vyu¾ila knihovnu pro zpracování obrazu OpenCV (angl. \textit{Open Source Computer Vision Library}) ve verzi 2.4.6. Tato knihovna obsahuje více ne¾ 2500 algoritmù, které je mo¾né vyu¾ít pro rozpoznávání tváøe, identifikaci objektù v~obraze, klasifikaci lidských akcí ve videu, pohyb kamery, zachycení pohybujících se objektù, extrahování 3D modelù, spojení více snímkù do jednoho, nalezení shodných snímkù v~databázi nebo snímání pohybu oèí a~jiné. OpenCV je kompatibilní s~programovacími jazyky C++, Java, Python a~Matlab/Octave \cite{itseez:about_opencv}. Z~uvedených jazykù jsem si zvolila Python ve verzi 2.7.5. Výsledná aplikace se nachází na pøilo¾eném CD (pøíloha \ref{chapter:cd}), základní funkcionalita je pak nastínìna v~diagramu \ref{img:app}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.65}{\includegraphics{fig/app.pdf}}
+\caption{Základní logika aplikace.}
+\label{img:app}
+\end{center}
+\end{figure}
+
+\subsection{Pou¾ité algoritmy}
+\textbf{Gaussùv filtr} je jedna z~nejèastìj¹ích metod pro odstranìní ¹umu ze snímku. Vyu¾ívá diskrétní konvoluce s~maskou urèenou prostøednictvím 2D Gaussovy funkce, hodnoty pro jednotlivé pixely se vypoèítají podle vztahu \ref{eq:gauss} \cite{bradski_kaehler:learning_opencv}:
+\begin{equation}
+\label{eq:gauss}
+G(x,y) = \frac{1}{2\pi \sigma^2}e^{-{\frac{x^2 + y^2}{2\sigma^2}}}
+\end{equation} 
+Kde $x, y$ jsou souøadnice pixelu a~$\sigma$ je standardní odchylka (bì¾nì v~rozmezí 1 a¾ 1,4).
+
+Hodnota ka¾dého pixelu je urèena prùmìrem jeho a~jeho nejbli¾¹ích sousedù. Souèet prvkù matice konvoluèního jádra po vynásobení vahou matice pak musí být roven jedné, aby nedocházelo ke zmìnì jasu v~obraze \cite{burlak:vyhledavani_textu}.
+
+\vskip 12pt
+
+\textbf{Prahování pomocí metody Otsu} redukuje snímek ve stupních ¹edi na binární obraz. Algoritmus urèí hodnotu optimálního prahu, který oddìluje pozadí a~popøedí snímku \cite{greensted:otsu_thresholding}. K~hledání prahu dochází na základì výpoètu vnitøního rozptylu (angl. \textit{within variance}) a~mezi-rozptylu (angl. \textit{between variance}), podle vztahù \ref{eq:within} a~\ref{eq:between}:
+\begin{equation}
+\label{eq:within}
+\sigma^2_w(t) = n_B(t)\sigma^2_B(t) + n_F(t)\sigma^2_F(t)
+\end{equation}
+kde 
+\begin{equation}
+n_B(t)=\sum\limits^{t-1}_{i=0} p(i)\text{,}
+\end{equation}
+\begin{equation}
+n_F(t)=\sum\limits^{N=1}_{i=t} p(i)\text{,} 
+\end{equation}
+\begin{equation}
+\sigma^2_B(t)=\text{vá¾ená suma rozptylu pozadí (pod hodnotou prahu),}
+\end{equation}
+\begin{equation}
+\sigma^2_F(t)=\text{vá¾ená suma rozptylu popøedí (nad hodnotou prahu).}
+\end{equation}
+$[0, N-1]$ je pak poèet úrovní intenzit v~obraze.
+
+\begin{equation}
+\label{eq:between}
+\sigma^2_b(t) = n_B(t)n_F(t)[\mu_B(t) - \mu_F(t)]
+\end{equation}
+kde $\sigma^2$ je vá¾ená suma suma rozptylu a~$\mu$ je prùmìrná hodnota intenzity.
+
+Cílem je najít práh $t$ takový, který minimalizuje vnitøní rozptyl nebo maximalizuje mezi-rozptyl \cite{morse:thresholding}.
+
+\subsection{Zpracování vstupu}
+Program naèítá snímky z~podslo¾ky zadané argumentem pøi spu¹tìní. V~pøípadì, ¾e není specifikována slo¾ka, naèítá snímky ze slo¾ky samples. 
+
+\subsection{Detekce prstu}
+Detekování pozice prstu na snímku zpracovává funkce \texttt{pointTemp()}. K~rozpoznání obrysù prstu vyu¾ívám funkce OpenCV \texttt{cv2.findContours()}. Pokud v¹ak zpracovávám nekvalitní snímek, nejdøíve je nutné ho rozostøit pomocí Gaussova filtru. V~opaèném pøípadì není mo¾né detekovat kontury prstu. Pro rozostøení snímku pou¾ívám funkci \texttt{cv2.GaussianBlur()} s~velikostí konvoluèní matice 5$\times$5 a~standardní odchylkou $\sigma=0$, co¾ znamená, ¾e odchylka je vypoèítána z~délky a~¹íøky snímku. V~souvislosti s~detekcí kontur jsem narazila na dal-¹í problém s~nekvalitními snímky -- u~nìkterých z~nich nebylo mo¾né detekovat souvislou konturu, proto bylo tøeba snímek upravit je¹tì jednou, a~to pomocí Otsu prahování \cite{maly:biometricke_testovani_zivosti}. Prahování obrazu zpracovává funkce \texttt{cv2.threshold()}. Otsu metodu urèuje extra argument funkce \texttt{cv2.TRESH\_OTSU}, jako práh funkce mù¾e být nastavena 0, nebo» bude nahrazena novì vypoèítanou hodnotou prahu. Potom je obrys detekován u~velké vìt¹iny snímkù. Jakmile program najde obrys prstu, jeho kontury se uchovávají ve vektoru \texttt{contours}, který je aplikován na pùvodní neupravený snímek pro dal¹í výpoèty. Pokud bychom pou¾ili upravený snímek, vypoèítané hodnoty by byly zkreslené. Zpracování snímku pøed dal¹í manipulací je znázornìno v~diagramu \ref{img:img_proc}.
+
+\begin{figure}[ht!]
+\begin{center}
+\scalebox{0.65}{\includegraphics{fig/img_proc.pdf}}
+\caption{Zpracování snímku.}
+\label{img:img_proc}
+\end{center}
+\end{figure}
+
+\subsection{Body pro mìøení teploty}
+Body pro mìøení teplotních rozdílù urèuji podle postupu zmínìného v~podsekci \ref{subsec:body_pro_mereni_teploty}. K~výpoètu souøadnic vyu¾ívám funkci \texttt{moments()} \cite{opencv_dev_team:structural_analysis_and_shape_decriptors}. Funkce zpracovává údaje o~jednotlivých èástech kontur a~vypoèítá souøadnice støedu objektu ohranièeného konturami. Z~kontur se dále urèí souøadnice hranièních bodù prstu. Pomocí støedových a~okrajových bodù následnì vypoèítám souøadnice bodù pro mìøení teploty a~na tìchto souøadnicích pouze naètu hodnoty pixelù. K~pøepoètu hodnoty pixelu na stupnì Celsia pak dochází podle následujícícho vztahu:
+
+\begin{equation}
+teplota = hodnotaPixelu \cdot \frac{8}{255} + 27
+\end{equation}
+
+\subsection{Prùmìrná teplota}
+Prùmìrnou teplotu prstu obstarává funkce \texttt{averageTemp()}. Obrázek procházím v~cyklech a~teplotu jednotlivých bodù na povrchu prstu ukládám do pole, ze kterého se nakonec vypoèítá prùmìrná hodnota. Pøepoèet na teplotní hodnotu probíhá podle stejného vztahu jako u~teplotních bodù v~pøedchozím odstavci.
+
+\subsection{Minima a~maxima}
+Teplotní maxima na prstu zpracovává funkce \texttt{maxTemp()}. Nejdøíve je nutné nalézt pixel na povrchu prstu s~nejvy¹¹í hodnotou. To provádím pomocí prahování. Zaèínám na nejvy¹¹í hodnotì (255) a~práh v~ka¾dém kroku sni¾uji o~0,1~\textdegree C. Ve chvíli, kdy dojde k~nalezení bodu s~nejvy¹¹í hodnotou, nastavím hodnotu prahu o~0,5~\textdegree C ní¾e a~vypoèítám plochu pokrytou nenulovými pixely a~porovnám ji s~plochou celého prstu.
+
+Funkce pro výpoèet minima se jmenuje \texttt{minTemp()} a~funguje podobnì jako funkce pro výpoèet maxima. Nejdøíve dojde k~hledání pixelu s~nejni¾¹í hodnotou, pøièem¾ je uva¾ováno, ¾e hodnota pixelù v~pozadí je nulová, tím pádem práh musí být vy¹¹í ne¾ 0. Po nalezení minima je navý¹en práh o~0,5~\textdegree C a~vypoèítána plocha a~porovnána s~celou plochou prstu.
+
+\subsection{Vyhodnocení vzorku}
+K~vyhodnocení prstu na vstupu pak slou¾í funkce \texttt{evaluate()}. Funkce dostane na vstup pole se v¹emi potøebnými údaji o~snímku, které byly vypoèítany pøi pøedcházejícím zpracování snímku. Na základì údajù získaných z~experimentù pak vyhodnocuje jednotlivé faktory pro urèení ¾ivosti, a~podle jejich hodnot pøièítá vzorku kladné body. Dochází k~hodnocení prùmìrné teploty prstù, teplotních rozdílù mezi urèenými body na prstu, prùmìrné teploty urèených bodù, teplotního maxima a~plochy s~minimální teplotou. Plocha s~maximální teplotou ani hodnota teplotního minima nakonec nebyly zahrnuty do hodnocení, nebo» rozdíly mezi ¾ivými a~ne¾ivými prsty u~tìchto faktorù se ukázaly jako minimální. Následnì dojde k~seètení jednotlivých hodnot, a~pokud vzorek dosáhne minimálnì 40 bodù ze 100, je prohlá¹en za ¾ivý prst.
+
+\section{Shrnutí experimentù}
+\label{section:shrnuti_experimentu}
+Celkem bylo testováno 152 vzorkù. Jak jsem ji¾ zmínila, ne¹lo jen o~¾ivé prsty, ale i~o~prsty s~nalepenými otisky nebo o~ne¾ivé pøedmìty. Celkem 88 vzorkù byly ¾ivé prsty. Zbylých 64 vzorkù byly falsifikáty. Výsledky mìøení jsou podrobnì rozepsány v~pøíloze \ref{chapter:vysledky_experimentu}.
+
+Experimenty ukázaly, ¾e metoda se neøadí mezi nejspolehlivìj¹í. Pøibli¾nì 24\% ¾ivých prstù bylo chybnì odmítnuto jako ne¾ivé. V~pøípadì ne¾ivých prstù bylo chybnì pøijato pøibli¾nì 9\% vzorkù. Nejvíce chybnì pøijatých vzorkù bylo mezi prsty s~otisky ze silikonu. Dále byl chybnì pøijat snímek prstu s~otiskem z~gumy a~snímek nahøátého zapalovaèe. Domnívám se v¹ak, ¾e v~situaci, kdy bych mìla k~dispozici opravdu tenké umìlé otisky (napøíklad ze silikonu nebo latexu), byla by spolehlivost zaøízení mnohem ni¾¹í. Bohu¾el jsem nemìla mo¾nost otestovat umìlý prst, tím pádem nemohu urèit, zda by mými experimenty pro¹el nebo byl správnì odmítnut jako ne¾ivý pøedmìt. Shrnutí experimentù zobrazuje tabulka \ref{tab:shrnuti_experimentu}. Vztahy \ref{eq:far} a~\ref{eq:frr} znázoròují výpoèet míry chybného pøijetí (FAR) a~chybného odmítnutí (FRR).
+
+\begin{table}[ht!]
+\begin{center}
+\begin{tabular}{| c | c | c |} \hline
+& \textbf{®ivé prsty} & \textbf{Ne¾ivé prsty} \\ \hline
+\textbf{Celkem} & 88 & 64 \\ \hline
+\textbf{Správnì pøijato} & 67 & - \\ \hline
+\textbf{Chybnì odmítnuto} & 21 & - \\ \hline
+\textbf{Správnì odmítnuto} & - & 58 \\ \hline
+\textbf{Chybnì pøijato} & - & 6 \\ \hline
+\end{tabular}
+\caption{Shrnutí experimentù.}
+\label{tab:shrnuti_experimentu}
+\end{center}
+\end{table}
+
+\begin{equation}
+FAR = \frac{6}{64} = 9,38 \%
+\label{eq:far}
+\end{equation}
+
+\begin{equation}
+FRR = \frac{21}{88} = 23,86 \%
+\label{eq:frr}
+\end{equation}
+
+\vskip 12pt
+
+Z~výsledkù experimentù vyplývá, ¾e pokud pou¾ijeme ne¾ivou imitaci prstu, která bude mít podobný tvar a~teplotní rozlo¾ení jako prst a~zároveò bude opatøena otiskem prstu, je zde urèitá pravdìpodobnost, ¾e zaøízení potenciálního útoèníka pøijme. To samé platí pro útoèníka, který pou¾ije velmi tenké fale¹né otisky, termokamera pak nerozpozná teplotní rozdíl, nebo» otisk se bude chovat stejnì jako povrch prstu.
+
+Algoritmus pro vyhodnocování ¾ivosti je pomìrnì pøísný, proto byl práh pro povolení/zamítnutí otisku urèen na 40 bodù ze 100. V~pøípadì, ¾e mìøíme ¾ivý prst, který má ni¾¹í teplotu, pravdìpodobnì dojde k~chybnému odmítnutí a~bude potøeba prst zahøát na vy¹¹í teplotu. U~experimentování nastal problém pøedev¹ím u~osob, kterým se nedokrvují ruce, jejich prsty pak byly nìkolikrát chybnì zamítnuty. Po zahøátí rukou tøením v¹ak byli pøijati bez problémù.
+
+Jak vyplývá z~hodnot FAR a~FRR, urèovat ¾ivost jen na základì teploty prstu není dostateènì spolehlivé, ideální systém by musel vyu¾ít kombinaci této metody s~nìkterou z~dal¹ích metod, aby bylo mo¾né dosáhnout uspokojivého výsledku.
+
+\chapter{Závìr}
+\label{chapter:zaver}
+V~rámci této práce jsem se seznámila s~oblastí zpracování otiskù prstù a~metodami urèování jejich ¾ivosti. Èást práce byla úspì¹nì prezentována na konferenci STUDENT EEICT 2014. Z~dostupných mechanických metod jsem si zvolila pachovou a~teplotní metodu.
+
+Po dùkladném zkoumání pachové metody jsem bohu¾el nemohla provést potøebné experimenty, nebo» nebylo mo¾né sehnat elektronický nos. Proto jsem se dohodla s~vedoucím práce na provedení teoretického rozboru a~návrhu koncepce øe¹ení. Dle dostupných zdrojù se v¹ak metoda jeví jako spolehlivá.
+
+Dal¹í rozsáhlou èástí práce je metoda teplotní. Pro tuto metodu ji¾ bylo mo¾né provést mno¾ství experimentù, jejich¾ výsledky jsou popsány v~sekci \ref{section:shrnuti_experimentu}.
+
+Metoda se podle výsledkù experimentù ukázala jako ménì spolehlivá ve srovnání s~jinými metodami pro urèování ¾ivosti. Potenciální útoèník mù¾e pomìrnì jednodu¹e senzoru podstrèit fale¹ný otisk nebo pøedmìt imitující prst a~má pomìrnì vysokou pravdìpodobnost, ¾e bude pøijat. Postaèí pou¾ít pøedmìt, který se tvarem co nejvíce podobá prstu, a~dostateènì ho zahøát. Naproti tomu, osoby, kterým se nedostateènì prokrvují prsty, budou odmítnuty jako ne¾ivé, stejnì jako osoby, které napø. pøijdou k~senzoru z~chladného prostøedí. Kladem metody je jednoznaènì bezkontaktní a~rychlé snímání, pokud bychom v¹ak uva¾ovali reálné vyu¾ití, bylo by tøeba metodu zkombinovat s~nìkterou z~dal¹ích metod urèování ¾ivosti, abychom dosáhli vy¹¹í spolehlivosti systému.

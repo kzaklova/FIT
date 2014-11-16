@@ -1,0 +1,129 @@
+%============================================================================
+% tento soubor pouzijte jako zaklad
+% (c) 2008 Michal Bidlo
+% E-mail: bidlom AT fit vutbr cz
+%============================================================================
+% kodovaní: iso-8859-2 (zmena prikazem iconv, recode nebo cstocs)
+%----------------------------------------------------------------------------
+% zpracování: make, make pdf, make desky, make clean
+% pøipomínky posílejte na e-mail: bidlom AT fit.vutbr.cz
+% vim: set syntax=tex encoding=latin2:
+%============================================================================
+\documentclass[cover]{fitthesis} % odevzdani do wisu - odkazy, na ktere se da klikat
+%\documentclass[cover,print]{fitthesis} % pro tisk - na odkazy se neda klikat
+%\documentclass[english,print]{fitthesis} % pro tisk - na odkazy se neda klikat
+%      \documentclass[english]{fitthesis}
+% * Je-li prace psana v anglickem jazyce, je zapotrebi u tridy pouzit 
+%   parametr english nasledovne:
+%      \documentclass[english]{fitthesis}
+% * Neprejete-li si vysazet na prvni strane dokumentu desky, zruste 
+%   parametr cover
+
+% zde zvolime kodovani, ve kterem je napsan text prace
+% "latin2" pro iso8859-2 nebo "cp1250" pro windows-1250, "utf8" pro "utf-8"
+%\usepackage{ucs}
+\usepackage[latin2]{inputenc}
+\usepackage[T1, IL2]{fontenc}
+\usepackage{url}
+\DeclareUrlCommand\url{\def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}}
+\newcommand{\myuv}[1]{\quotedblbase #1\textquotedblleft}
+
+%zde muzeme vlozit vlastni balicky
+
+
+% =======================================================================
+% balíèek "hyperref" vytváøí klikací odkazy v pdf, pokud tedy pou¾ijeme pdflatex
+% problém je, ¾e balíèek hyperref musí být uveden jako poslední, tak¾e nemù¾e
+% být v ¹ablonì
+\ifWis
+\ifx\pdfoutput\undefined % nejedeme pod pdflatexem
+\else
+  \usepackage{color}
+  \usepackage[unicode,colorlinks,hyperindex,plainpages=false,pdftex]{hyperref}
+  \definecolor{links}{rgb}{0.4,0.5,0}
+  \definecolor{anchors}{rgb}{1,0,0}
+  \def\AnchorColor{anchors}
+  \def\LinkColor{links}
+  \def\pdfBorderAttrs{/Border [0 0 0] }  % bez okrajù kolem odkazù
+  \pdfcompresslevel=9
+\fi
+\fi
+
+%Informace o praci/projektu
+%---------------------------------------------------------------------------
+\projectinfo{
+  %Prace
+  project=BP,            %typ prace BP/SP/DP/DR
+  year=2014,             %rok
+  date=\today,           %datum odevzdani
+  %Nazev prace
+  title.cs={Biometrické testování ¾ivosti -- mechanické vlastnosti},  %nazev prace v cestine
+  title.en={Biometrical Liveness Detection -- Mechanical Characteristics}, %nazev prace v anglictine
+  %Autor
+  author={Kateøina Zaklová},   %jmeno prijmeni autora
+  %author.title.p=Bc., %titul pred jmenem (nepovinne)
+  %author.title.a=PhD, %titul za jmenem (nepovinne)
+  %Ustav
+  department=UITS, % doplnte prislusnou zkratku: UPSY/UIFS/UITS/UPGM
+  %Skolitel
+  supervisor=Martin Drahanský, %jmeno prijmeni skolitele
+  supervisor.title.p={doc. Ing.},   %titul pred jmenem (nepovinne)
+  supervisor.title.a={Ph.D.},    %titul za jmenem (nepovinne)
+  %Klicova slova, abstrakty, prohlaseni a podekovani je mozne definovat 
+  %bud pomoci nasledujicich parametru nebo pomoci vyhrazenych maker (viz dale)
+  %===========================================================================
+  %Klicova slova
+  keywords.cs={biometrie, biometrický systém, senzor, otisky prstù, testování ¾ivosti, elektronický nos, pach, termokamera, teplota}, %klicova slova v ceskem jazyce
+  keywords.en={biometrics, biometric system, sensor, fingerprint, liveness detection, e-nose, electronic nose, odor analysis, thermocam, temperature}, %klicova slova v anglickem jazyce
+  %Abstract
+  abstract.cs={Práce je zamìøena na mechanické metody testování ¾ivosti u~otiskù prstù. Teoretická èást popisuje biometrické systémy, mìøení jejich spolehlivosti, druhy senzorù a nìkteré z~metod pro urèování ¾ivosti. Pro tuto práci byly podrobnìji nastudovány dvì metody -- urèování ¾ivosti podle pachu a urèování ¾ivosti podle tìlesné teploty. Práce se rovnì¾ zabývá implementací aplikace na urèování ¾ivosti podle teploty a popisem a vyhodnocením provedených experimentù.}, % abstrakt v ceskem jazyce
+  abstract.en={Main focus of this thesis is the detection of liveliness of the finger by the means of mechanical methods. Theoretical part of the thesis describes biometric systems, their reliability metrics, various kinds of sensors and methods of liveness detection. Two methods are covered in detail -- liveness detection by odor and liveness detection by temperature. The thesis also illustrates implementation of the application for liveness detection by temperature and evaluates range of experiments carried out during the research.}, % abstrakt v anglickem jazyce
+  %Prohlaseni
+  declaration={Prohla¹uji, ¾e jsem tuto bakaláøskou práci vypracovala samostatnì pod vedením pana doc. Ing., Dipl.-Ing. Martina Drahanského, Ph.D. a uvedla jsem v¹echny literární prameny, ze kterých jsem èerpala. },
+  %Podekovani (nepovinne)
+  acknowledgment={Zde bych chtìla podìkovat svému vedoucímu panu doc. Drahanskému za odborné vedení a cenné rady pøi tvorbì této práce. Také bych chtìla podìkovat øadì dobrovolníkù, kteøí se úèastnili experimentù.} % nepovinne
+}
+
+%Abstrakt (cesky, anglicky)
+%\abstract[cs]{Do tohoto odstavce bude zapsán výtah (abstrakt) práce v èeském jazyce.}
+%\abstract[en]{Do tohoto odstavce bude zapsán výtah (abstrakt) práce v anglickém jazyce.}
+
+%Klicova slova (cesky, anglicky)
+%\keywords[cs]{Sem budou zapsána jednotlivá klíèová slova v èeském jazyce, oddìlená èárkami.}
+%\keywords[en]{Sem budou zapsána jednotlivá klíèová slova v anglickém jazyce, oddìlená èárkami.}
+
+%Prohlaseni
+%\declaration{Prohla¹uji, ¾e jsem tuto bakaláøskou práci vypracoval samostatnì pod vedením pana X...
+%Dal¹í informace mi poskytli...
+%Uvedl jsem v¹echny literární prameny a publikace, ze kterých jsem èerpal.}
+
+%Podekovani (nepovinne)
+%\acknowledgment{V této sekci je mo¾no uvést podìkování vedoucímu práce a tìm, kteøí poskytli odbornou pomoc
+%(externí zadavatel, konzultant, apod.).}
+
+\begin{document}
+  % Vysazeni titulnich stran
+  % ----------------------------------------------
+  \maketitle
+  % Obsah
+  % ----------------------------------------------
+  \tableofcontents
+  
+  % Seznam obrazku a tabulek (pokud prace obsahuje velke mnozstvi obrazku, tak se to hodi)
+  % \listoffigures
+  % \listoftables 
+
+  % Text prace
+  % ----------------------------------------------
+  \input{obsah} % viz. obsah.tex
+
+  % Pouzita literatura
+  % ----------------------------------------------
+
+  \bibliographystyle{czechiso}
+  \bibliography{literatura} % viz. literatura.bib
+
+  \appendix
+  
+  \input{prilohy} % viz. prilohy.tex
+\end{document}
