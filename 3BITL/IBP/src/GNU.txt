@@ -1,0 +1,3 @@
+Copyright ©2014 Katerina Zaklova.
+Tento program je napsany pod Obecnou verejnou licenci GNU (vydavanou Free Software Foundation). Program patri mezi svobodny software a muze byt siren a upravovan podle treti nebo jakekoliv pozdejsi verze zmizene licence.
+Tento program ma byt uzitecny, avsak nevztahuje se na nej jakakoliv zaruka (podrobnosti jsou k nalezeni v Obecne verejne licenci GNU).

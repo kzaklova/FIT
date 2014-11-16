@@ -11,4 +11,3 @@ Jsou dostupne 4 slozky se snimky:
 samples/ - obsahuje jeden snimek ziveho prstu a jeden snimek neziveho prstu, slouzi pouze pro rychlou ukazku funkcionality
 samples_fake/ - obsahuje 64 snimku nezivych prstu, ktere byly pouzity pro detekci zivosti v ramci bakalarske prace
 samples_live/ - obsahuje 88 snimku zivych prstu, ktere byly pouzity pro detekci zivosti v ramci bakalarske prace
-samples_uncut/ - slouzi pouze pro doplneni (ne pro testovani programu), obsahuje vsechny snimky ze slozek samples_fake/ a samples_live/ pred oriznutim stupnice s teplotou
